@@ -1,1 +1,3 @@
-# flutter-book
+# flutter_book
+
+A new Flutter project.
