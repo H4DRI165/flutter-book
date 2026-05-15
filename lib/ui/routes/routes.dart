@@ -7,9 +7,11 @@ part 'routes.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    
     AutoRoute(page: LandingRoute.page, initial: true),
+    AutoRoute(page: LoginRoute.page),
+    AutoRoute(page: ForgotPasswordRoute.page),
     AutoRoute(page: MainMenuRoute.page),
-    AutoRoute(page: ConstrainRoute.page),
+    AutoRoute(page: ConstrainIntroRoute.page),
+    AutoRoute(page: ConstrainTightRoute.page),
   ];
 }

@@ -11,17 +11,49 @@
 part of 'routes.dart';
 
 /// generated route for
-/// [ConstrainPage]
-class ConstrainRoute extends PageRouteInfo<void> {
-  const ConstrainRoute({List<PageRouteInfo>? children})
-    : super(ConstrainRoute.name, initialChildren: children);
+/// [ConstrainIntroPage]
+class ConstrainIntroRoute extends PageRouteInfo<void> {
+  const ConstrainIntroRoute({List<PageRouteInfo>? children})
+    : super(ConstrainIntroRoute.name, initialChildren: children);
 
-  static const String name = 'ConstrainRoute';
+  static const String name = 'ConstrainIntroRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ConstrainPage();
+      return const ConstrainIntroPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ConstrainTightPage]
+class ConstrainTightRoute extends PageRouteInfo<void> {
+  const ConstrainTightRoute({List<PageRouteInfo>? children})
+    : super(ConstrainTightRoute.name, initialChildren: children);
+
+  static const String name = 'ConstrainTightRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ConstrainTightPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ForgotPasswordPage]
+class ForgotPasswordRoute extends PageRouteInfo<void> {
+  const ForgotPasswordRoute({List<PageRouteInfo>? children})
+    : super(ForgotPasswordRoute.name, initialChildren: children);
+
+  static const String name = 'ForgotPasswordRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ForgotPasswordPage();
     },
   );
 }
@@ -38,6 +70,22 @@ class LandingRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const LandingPage();
+    },
+  );
+}
+
+/// generated route for
+/// [LoginPage]
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
+    : super(LoginRoute.name, initialChildren: children);
+
+  static const String name = 'LoginRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoginPage();
     },
   );
 }

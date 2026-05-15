@@ -5,12 +5,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
+    this.titleSize = 12,
+    this.subtitleSize = 16,
     this.fallBackButton = true,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final double? titleSize;
+  final double? subtitleSize;
   final bool fallBackButton;
 
   @override
@@ -44,20 +48,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
+            style: TextStyle(
+              fontSize: titleSize,
+              color: const Color(0xFFEFEEEB),
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
+          if (subtitle != null)
+            Text(
+              subtitle!,
+              style: TextStyle(
+                fontSize: subtitleSize,
+                color: const Color(0xFFC2C0B6),
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
         ],
       ),
     );

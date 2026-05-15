@@ -66,7 +66,7 @@ class FeaturedSection extends StatelessWidget {
             progressBarValue: 0.6,
             progressBarColor: Colors.purple,
             onTap: () async {
-              await context.pushRoute(const ConstrainRoute());
+              await context.pushRoute(const ConstrainIntroRoute());
             },
           ),
           const SizedBox(height: 10),
@@ -82,7 +82,7 @@ class FeaturedSection extends StatelessWidget {
             progressBarValue: 0.2,
             progressBarColor: Colors.green,
             onTap: () async {
-              await context.pushRoute(const ConstrainRoute());
+              // await context.pushRoute(const ConstrainRoute());
             },
           ),
         ],

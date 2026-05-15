@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../app.dart';
+
 enum CardVariant { featured, topic }
 
 class CardText {
@@ -122,20 +124,10 @@ class FeaturedLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: containerColor,
-          ),
-          child: SizedBox(
-            height: 50,
-            width: 50,
-            child: Icon(
-              icon,
-              size: 22,
-              color: iconColor,
-            ),
-          ),
+        AppIcon(
+          icon: icon,
+          iconColor: iconColor,
+          containerColor: containerColor,
         ),
         const SizedBox(width: 10),
         Expanded(

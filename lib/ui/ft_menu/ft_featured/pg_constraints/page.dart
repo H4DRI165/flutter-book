@@ -4,23 +4,25 @@ import 'package:flutter/material.dart';
 import '../../../../app.dart';
 
 @RoutePage()
-class ConstrainPage extends StatelessWidget {
-  const ConstrainPage({super.key});
+class ConstrainIntroPage extends StatelessWidget {
+  const ConstrainIntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       appBar: CustomAppBar(
         title: 'Constraints',
+        titleSize: 16,
         subtitle: 'The golden layout rule',
+        subtitleSize: 13,
       ),
-      body: BodyContent(),
+      body: _BodyContent(),
     );
   }
 }
 
-class BodyContent extends StatelessWidget {
-  const BodyContent({super.key});
+class _BodyContent extends StatelessWidget {
+  const _BodyContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,32 +97,11 @@ class BodyContent extends StatelessWidget {
             onTap: () {},
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Start exploring',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, color: Colors.white, size: 18),
-                  ],
-                ),
-              ),
-            ),
+          AppButton(
+            label: 'Start exploring',
+            onTap: () async {
+              await context.pushRoute(const ConstrainTightRoute());
+            },
           ),
           const SizedBox(height: 30),
         ],
