@@ -38,15 +38,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             );
           }
         },
-        child: const Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _Header(),
-                _BodyContent(),
-              ],
+        child: const SafeArea(
+          child: Scaffold(
+            body: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _Header(),
+                  _BodyContent(),
+                ],
+              ),
             ),
           ),
         ),
@@ -149,7 +151,7 @@ class _BodyContentState extends State<_BodyContent> {
           const Spacer(),
           const _Divider(),
           const SizedBox(height: 20),
-          const _SignUpRow(),
+          const _LoginRow(),
         ],
       ),
     );
@@ -230,8 +232,8 @@ class _Divider extends StatelessWidget {
   }
 }
 
-class _SignUpRow extends StatelessWidget {
-  const _SignUpRow();
+class _LoginRow extends StatelessWidget {
+  const _LoginRow();
 
   @override
   Widget build(BuildContext context) {

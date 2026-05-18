@@ -30,3 +30,7 @@ class LoginObscurePasswordToggled extends LoginEvent {
 class LoginSubmitted extends LoginEvent {
   const LoginSubmitted();
 }
+
+class LoginGoogleSignIn extends LoginEvent {
+  const LoginGoogleSignIn();
+}

@@ -3,32 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app.dart';
-import 'bloc/login_bloc.dart';
+import 'bloc/register_bloc.dart';
 
 @RoutePage()
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginBloc(
+      create: (context) => RegisterBloc(
         authRepository: context.read<AuthRepository>(),
       ),
-      child: BlocListener<LoginBloc, LoginPageState>(
+      child: BlocListener<RegisterBloc, RegisterPageState>(
         listener: (context, state) {
-          if (state.status == LoginStatus.success) {
-            context.router.replace(const MainMenuRoute());
-          } else if (state.status == LoginStatus.failure) {
+          if (state.status == RegisterStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Create account successfully.',
+                ),
+              ),
+            );
+            context.router.replace(const LoginRoute());
+          } else if (state.status == RegisterStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  state.errorMessage ?? 'Login failed. Please try again.',
+                  state.errorMessage ?? 'Register failed. Please try again.',
                 ),
               ),
             );
@@ -62,14 +69,14 @@ class _Header extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppIcon(
-          icon: Icons.menu_book_rounded,
+          icon: Icons.person_add_alt_1_outlined,
           iconColor: Color(0xFF534AB7),
           containerColor: Color(0xFFEEEDFE),
           size: 28,
         ),
         SizedBox(height: 10),
         Text(
-          'Welcome back',
+          'Create an account',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w500,
@@ -77,7 +84,7 @@ class _Header extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text(
-          'Sign in to continue your learning journey',
+          'Start your learning your journey today',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
@@ -99,11 +106,13 @@ class _BodyContent extends StatefulWidget {
 class _BodyContentState extends State<_BodyContent> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -114,12 +123,12 @@ class _BodyContentState extends State<_BodyContent> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          BlocBuilder<LoginBloc, LoginPageState>(
+          BlocBuilder<RegisterBloc, RegisterPageState>(
             buildWhen: (previous, current) => previous.emailError != current.emailError,
             builder: (context, state) {
               return AppTextField(
                 controller: _emailController,
-                labelText: 'Email',
+                labelText: 'Email your email',
                 hintText: 'Enter your email',
                 border: AppFormFieldBorder.roundedOutlined,
                 prefixIcon: const Icon(
@@ -130,20 +139,20 @@ class _BodyContentState extends State<_BodyContent> {
                 errorText: state.emailError,
                 clearable: true,
                 onChanged: (value) {
-                  context.read<LoginBloc>().add(LoginEmailChanged(value));
+                  context.read<RegisterBloc>().add(RegisterEmailChanged(value));
                 },
               );
             },
           ),
           const SizedBox(height: 16),
-          BlocBuilder<LoginBloc, LoginPageState>(
+          BlocBuilder<RegisterBloc, RegisterPageState>(
             buildWhen: (previous, current) =>
                 previous.obscurePassword != current.obscurePassword || previous.passwordError != current.passwordError,
             builder: (context, state) {
               return AppTextField(
                 controller: _passwordController,
-                labelText: 'Password',
-                hintText: 'Enter your password',
+                labelText: 'Create a password',
+                hintText: 'Create a password',
                 border: AppFormFieldBorder.roundedOutlined,
                 prefixIcon: const Icon(
                   Icons.lock_outlined,
@@ -157,57 +166,75 @@ class _BodyContentState extends State<_BodyContent> {
                     state.obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
                   ),
                   onPressed: () {
-                    context.read<LoginBloc>().add(const LoginObscurePasswordToggled());
+                    context.read<RegisterBloc>().add(const RegisterObscurePasswordToggled());
                   },
                 ),
                 onChanged: (value) {
-                  context.read<LoginBloc>().add(LoginPasswordChanged(value));
+                  context.read<RegisterBloc>().add(RegisterPasswordChanged(value));
                 },
               );
             },
           ),
-          const SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              context.router.push(const ForgotPasswordRoute());
-            },
-            child: const Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot password?',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  decoration: TextDecoration.underline,
+          const SizedBox(height: 16),
+          BlocBuilder<RegisterBloc, RegisterPageState>(
+            buildWhen: (previous, current) =>
+                previous.obscureConfirmPassword != current.obscureConfirmPassword ||
+                previous.confirmPasswordError != current.confirmPasswordError,
+            builder: (context, state) {
+              return AppTextField(
+                controller: _confirmPasswordController,
+                labelText: 'Confirm your password',
+                hintText: 'Confirm your password',
+                border: AppFormFieldBorder.roundedOutlined,
+                prefixIcon: const Icon(
+                  Icons.lock_outlined,
+                  size: 20,
+                  color: Colors.grey,
                 ),
-              ),
-            ),
+                errorText: state.confirmPasswordError,
+                obscureText: state.obscureConfirmPassword,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    state.obscureConfirmPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                  ),
+                  onPressed: () {
+                    context.read<RegisterBloc>().add(
+                      const RegisterObscureConfirmPasswordToggled(),
+                    );
+                  },
+                ),
+                onChanged: (value) {
+                  context.read<RegisterBloc>().add(
+                    RegisterConfirmPasswordChanged(value),
+                  );
+                },
+              );
+            },
           ),
           const SizedBox(height: 20),
-          BlocBuilder<LoginBloc, LoginPageState>(
+          BlocBuilder<RegisterBloc, RegisterPageState>(
             buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) => _LoginButton(
-              isLoading: state.status == LoginStatus.loading,
+            builder: (context, state) => _RegisterButton(
+              isLoading: state.status == RegisterStatus.loading,
               onTap: () {
-                context.read<LoginBloc>().add(const LoginSubmitted());
+                context.read<RegisterBloc>().add(const RegisterSubmitted());
               },
             ),
           ),
-
           const SizedBox(height: 20),
-          const _Divider(middleText: 'or continue with'),
+          const _Divider(),
           const SizedBox(height: 20),
           const _GoogleButton(),
           const Spacer(),
-          const _SignUpRow(),
+          const _LoginRow(),
         ],
       ),
     );
   }
 }
 
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({
+class _RegisterButton extends StatelessWidget {
+  const _RegisterButton({
     required this.isLoading,
     required this.onTap,
   });
@@ -221,9 +248,10 @@ class _LoginButton extends StatelessWidget {
       onTap: isLoading ? null : onTap,
       child: DecoratedBox(
         decoration: BoxDecoration(
+          color: const Color(0xFF534ab7),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.grey,
+            color: const Color(0xFF534ab7),
             width: 1.0,
           ),
         ),
@@ -241,7 +269,7 @@ class _LoginButton extends StatelessWidget {
                     ),
                   )
                 : const Text(
-                    'Sign in',
+                    'Create account',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
@@ -256,9 +284,7 @@ class _LoginButton extends StatelessWidget {
 }
 
 class _Divider extends StatelessWidget {
-  const _Divider({this.middleText});
-
-  final String? middleText;
+  const _Divider();
 
   @override
   Widget build(BuildContext context) {
@@ -276,30 +302,28 @@ class _Divider extends StatelessWidget {
             child: const SizedBox(height: 1),
           ),
         ),
-        if (middleText != null) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              middleText!,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.withValues(alpha: 0.8),
-              ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            'or continue with',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.withValues(alpha: 0.8),
             ),
           ),
-          Expanded(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey.withValues(alpha: 0.3),
-                  ),
+        ),
+        Expanded(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey.withValues(alpha: 0.3),
                 ),
               ),
-              child: const SizedBox(height: 1),
             ),
+            child: const SizedBox(height: 1),
           ),
-        ],
+        ),
       ],
     );
   }
@@ -311,9 +335,7 @@ class _GoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.read<LoginBloc>().add(const LoginGoogleSignIn());
-      },
+      onTap: () {},
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
@@ -339,8 +361,8 @@ class _GoogleButton extends StatelessWidget {
   }
 }
 
-class _SignUpRow extends StatelessWidget {
-  const _SignUpRow();
+class _LoginRow extends StatelessWidget {
+  const _LoginRow();
 
   @override
   Widget build(BuildContext context) {
@@ -348,15 +370,15 @@ class _SignUpRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Don't have an account? ",
+          'Already have an account? ',
           style: TextStyle(fontSize: 13, color: Colors.grey),
         ),
         GestureDetector(
           onTap: () {
-            context.router.push(const RegisterRoute());
+            context.router.maybePop();
           },
           child: const Text(
-            'Sign up',
+            'Sign in',
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,

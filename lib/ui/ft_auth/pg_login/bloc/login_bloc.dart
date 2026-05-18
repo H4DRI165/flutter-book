@@ -14,6 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginPageState> {
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginObscurePasswordToggled>(_onObscurePasswordToggled);
     on<LoginSubmitted>(_onSubmitted);
+    on<LoginGoogleSignIn>(_onGoogleSignIn);
   }
 
   // --------------------------------- FIELDS ---------------------------------
@@ -69,6 +70,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginPageState> {
 
     try {
       await authRepository.signIn(email: state.email, password: state.password);
+      emit(state.copyWith(status: LoginStatus.success));
+    } on AuthException catch (e) {
+      emit(state.copyWith(status: LoginStatus.failure, errorMessage: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: LoginStatus.failure));
+    }
+  }
+
+  Future<void> _onGoogleSignIn(
+    LoginGoogleSignIn event,
+    Emitter<LoginPageState> emit,
+  ) async {
+    emit(state.copyWith(status: LoginStatus.loading));
+
+    try {
+      await authRepository.signInWithGoogle();
       emit(state.copyWith(status: LoginStatus.success));
     } on AuthException catch (e) {
       emit(state.copyWith(status: LoginStatus.failure, errorMessage: e.message));
