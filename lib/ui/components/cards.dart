@@ -19,14 +19,14 @@ class CardText {
 }
 
 class CardItem extends StatelessWidget {
-  const CardItem({
+  CardItem({
     super.key,
     required this.icon,
     required this.variant,
     required this.title,
     required this.description,
-    this.iconColor = Colors.white,
-    this.containerColor = Colors.grey,
+    this.iconColor = const Color(0xFF5752C1),
+    this.containerColor = const Color(0xFFEEEDFE),
     this.onTap,
     this.padding,
 
@@ -39,6 +39,7 @@ class CardItem extends StatelessWidget {
     this.enableTag = false,
     this.tag,
     this.tagColor,
+    this.tagContainerColor,
   });
 
   final IconData icon;
@@ -59,6 +60,7 @@ class CardItem extends StatelessWidget {
   final bool enableTag;
   final String? tag;
   final Color? tagColor;
+  final Color? tagContainerColor;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +93,7 @@ class CardItem extends StatelessWidget {
                   enableTag: enableTag,
                   tag: tag,
                   tagColor: tagColor,
+                  tagContainerColor: tagContainerColor,
                 ),
         ),
       ),
@@ -182,6 +185,7 @@ class TopicLayout extends StatelessWidget {
     this.containerColor,
     this.tag,
     this.tagColor,
+    this.tagContainerColor,
     this.enableTag = false,
   });
 
@@ -192,6 +196,7 @@ class TopicLayout extends StatelessWidget {
   final Color? containerColor;
   final String? tag;
   final Color? tagColor;
+  final Color? tagContainerColor;
   final bool enableTag;
 
   @override
@@ -237,16 +242,16 @@ class TopicLayout extends StatelessWidget {
         if (enableTag)
           DecoratedBox(
             decoration: BoxDecoration(
-              color: tagColor!,
+              color: tagContainerColor!,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
               padding: const EdgeInsetsGeometry.fromLTRB(10, 0, 10, 0),
               child: Text(
                 tag!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
-                  color: Colors.black,
+                  color: tagColor ?? Colors.black,
                 ),
               ),
             ),

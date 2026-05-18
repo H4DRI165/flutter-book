@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 import '../../../../app.dart';
 
 @RoutePage()
-class ConstrainUnboundedPage extends StatefulWidget {
-  const ConstrainUnboundedPage({super.key});
+class ConstrainLoosePage extends StatefulWidget {
+  const ConstrainLoosePage({super.key});
 
   @override
-  State<ConstrainUnboundedPage> createState() => _ConstrainUnboundedPageState();
+  State<ConstrainLoosePage> createState() => _ConstrainLoosePageState();
 }
 
-class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> {
+class _ConstrainLoosePageState extends State<ConstrainLoosePage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       appBar: CustomAppBar(
-        title: 'Unbounded Constraints',
+        title: 'Loose Constraints',
         titleSize: 16,
-        subtitle: 'Drag sliders to see overflow',
+        subtitle: 'Drag sliders to explore the range',
         subtitleSize: 13,
       ),
       body: _BodyContent(),
@@ -34,8 +34,8 @@ class _BodyContent extends StatefulWidget {
 }
 
 class _BodyContentState extends State<_BodyContent> {
-  double _width = 50;
-  double _height = 50;
+  double _width = 170;
+  double _height = 90;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +66,10 @@ class _BodyContentState extends State<_BodyContent> {
           const _InfoCard(),
           const Spacer(),
           AppButton(
-            label: 'Main Menu',
-            onTap: () {},
+            label: 'Next: unbounded',
+            onTap: () {
+              context.pushRoute(const ConstrainUnboundedRoute());
+            },
           ),
         ],
       ),
@@ -120,79 +122,36 @@ class _LivePreview extends StatelessWidget {
                       color: const Color(0xFF534AB7),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text(
-                      'parent: unbounded (∞)',
-                      style: TextStyle(
+                    child: Text(
+                      'ConstrainedBox ${width.toInt()}×${height.toInt()}',
+                      style: const TextStyle(
                         fontSize: 11,
                         color: Colors.white,
                       ),
                     ),
                   ),
                 ),
-                Container(
-                  width: 200,
-                  height: 120,
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 120),
+                  width: width,
+                  height: height,
                   decoration: BoxDecoration(
+                    color: const Color(0xFFEEEDFE),
                     border: Border.all(
-                      color: Colors.grey.withValues(alpha: 0.5),
-                      width: 1,
+                      color: const Color(0xFF534AB7),
+                      width: 1.5,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 4,
-                        right: 6,
-                        child: Text(
-                          'screen limit 200×120',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey.withValues(alpha: 0.6),
-                          ),
-                        ),
+                  child: Center(
+                    child: Text(
+                      'child ${width.toInt()}×${height.toInt()}',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF3C3489),
                       ),
-                      ClipRect(
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 120),
-                          width: width,
-                          height: height,
-                          decoration: BoxDecoration(
-                            color: width > 200 || height > 110
-                                ? Colors.red.withValues(alpha: 0.1)
-                                : const Color(0xFFEEEDFE),
-                            border: Border.all(
-                              color: width > 200 || height > 110 ? Colors.red : const Color(0xFF534AB7),
-                              width: 1.5,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  'child ${width.toInt()}×${height.toInt()}',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF3C3489),
-                                  ),
-                                ),
-                                if (width > 200 || height > 110)
-                                  const Text(
-                                    '⚠ Overflow!',
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
@@ -230,16 +189,16 @@ class _MetricCards extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'min → ∞',
+                  'min → max',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.withValues(alpha: 0.7),
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'W: 0 → ∞',
-                  style: TextStyle(
+                Text(
+                  'W: 0 → ${width.toInt()}',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
@@ -264,15 +223,15 @@ class _MetricCards extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'min → ∞',
+                  'min → max',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey.withValues(alpha: 0.7),
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'H: 0 → ∞',
+                Text(
+                  'H: 0 → ${height.toInt()}',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -307,7 +266,7 @@ class _InfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'What is an unbounded constraint?',
+              'What is a loose constraint?',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -315,7 +274,7 @@ class _InfoCard extends StatelessWidget {
               ),
             ),
             const Text(
-              'The parent sets no limit. The child can be any size even infinite.',
+              'The parent sets a ranges. The child can choose any size within that range.',
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.white,

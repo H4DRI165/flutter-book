@@ -82,7 +82,7 @@ class _BodyContent extends StatelessWidget {
             title: const CardText(
               'Step 3 - Key rule',
               fontSize: 12,
-              color: Colors.deepPurple,
+              color: Color(0xFFd3bcfd),
             ),
             description: const [
               CardText(

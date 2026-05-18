@@ -27,6 +27,22 @@ class ConstrainIntroRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ConstrainLoosePage]
+class ConstrainLooseRoute extends PageRouteInfo<void> {
+  const ConstrainLooseRoute({List<PageRouteInfo>? children})
+    : super(ConstrainLooseRoute.name, initialChildren: children);
+
+  static const String name = 'ConstrainLooseRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ConstrainLoosePage();
+    },
+  );
+}
+
+/// generated route for
 /// [ConstrainTightPage]
 class ConstrainTightRoute extends PageRouteInfo<void> {
   const ConstrainTightRoute({List<PageRouteInfo>? children})
@@ -38,6 +54,22 @@ class ConstrainTightRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ConstrainTightPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ConstrainUnboundedPage]
+class ConstrainUnboundedRoute extends PageRouteInfo<void> {
+  const ConstrainUnboundedRoute({List<PageRouteInfo>? children})
+    : super(ConstrainUnboundedRoute.name, initialChildren: children);
+
+  static const String name = 'ConstrainUnboundedRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ConstrainUnboundedPage();
     },
   );
 }
@@ -102,6 +134,22 @@ class MainMenuRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainMenuPage();
+    },
+  );
+}
+
+/// generated route for
+/// [RegisterPage]
+class RegisterRoute extends PageRouteInfo<void> {
+  const RegisterRoute({List<PageRouteInfo>? children})
+    : super(RegisterRoute.name, initialChildren: children);
+
+  static const String name = 'RegisterRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RegisterPage();
     },
   );
 }

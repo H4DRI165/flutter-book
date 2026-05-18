@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'ui/ft_auth/repository/auth_repository.dart';
 import 'ui/routes/routes.dart';
@@ -15,6 +18,12 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5d2Vsbnl6cWt4ZXllZXJvZXdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NzA3NTYsImV4cCI6MjA5NDM0Njc1Nn0.qnLX4bTXYndk9EdUs4w1KVf4PR_EI1ZkTLiM5VS5sNI',
   );
+
+  if (Platform.isAndroid || Platform.isIOS) {
+    await GoogleSignIn.instance.initialize(
+      serverClientId: '951314091908-pbecodmg299bfrsvhhjdtcqc209fsicb.apps.googleusercontent.com',
+    );
+  }
 
   runApp(
     RepositoryProvider(

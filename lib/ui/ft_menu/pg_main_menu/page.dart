@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app.dart';
+import 'bloc/main_menu_bloc.dart';
 
 @RoutePage()
 class MainMenuPage extends StatelessWidget {
@@ -9,13 +11,31 @@ class MainMenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
-        title: 'Welcome back',
-        subtitle: 'Flutter Book',
-        fallBackButton: false,
+    return BlocProvider(
+      create: (_) => MainMenuBloc(authRepository: AuthRepository()),
+      child: BlocListener<MainMenuBloc, MainMenuState>(
+        listener: (context, state) {
+          if (state.status == MainMenuStatus.loggedOut) {
+            context.router.replace(const LoginRoute());
+          }
+        },
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: 'Welcome back',
+                subtitle: 'Flutter Book',
+                fallBackButton: false,
+                logoutButton: true,
+                onLogout: () {
+                  context.read<MainMenuBloc>().add(const MainMenuLogoutPressed());
+                },
+              ),
+              body: const Content(),
+            );
+          },
+        ),
       ),
-      body: Content(),
     );
   }
 }
@@ -55,7 +75,7 @@ class FeaturedSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           CardItem(
-            icon: Icons.arrow_downward_rounded,
+            icon: Icons.dashboard_outlined,
             variant: CardVariant.featured,
             title: const CardText(
               'Constraints',
@@ -71,7 +91,7 @@ class FeaturedSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           CardItem(
-            icon: Icons.arrow_downward_rounded,
+            icon: Icons.account_tree_outlined,
             variant: CardVariant.featured,
             title: const CardText(
               'Widget tree',
@@ -116,36 +136,34 @@ class TopicSection extends StatelessWidget {
               children: [
                 Expanded(
                   child: CardItem(
-                    icon: Icons.arrow_downward_rounded,
-                    iconColor: Colors.blue,
+                    icon: Icons.lock,
                     variant: CardVariant.topic,
                     title: const CardText(
-                      'Tight vs Loose',
+                      'Tight constraints',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                     description: const [CardText('When min equals max')],
                     enableTag: true,
                     tag: 'Layout',
-                    tagColor: Colors.blueAccent,
+                    tagContainerColor: Colors.blueAccent,
                     onTap: () {},
                   ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: CardItem(
-                    icon: Icons.arrow_downward_rounded,
-                    iconColor: Colors.green,
+                    icon: Icons.zoom_out_map_rounded,
                     variant: CardVariant.topic,
                     title: const CardText(
-                      'Unbounded',
+                      'Loose constraints',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                    description: const [CardText('Infinite constraints explained')],
+                    description: const [CardText('Child picks its size')],
                     enableTag: true,
-                    tag: 'Common error',
-                    tagColor: Colors.yellowAccent,
+                    tag: 'Layout',
+                    tagContainerColor: Colors.yellowAccent,
                     onTap: () {},
                   ),
                 ),
@@ -153,6 +171,32 @@ class TopicSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: CardItem(
+                    icon: Icons.warning_amber_rounded,
+                    iconColor: Color(0XFFA3323B),
+                    containerColor: const Color(0xFFFCEBEB),
+                    variant: CardVariant.topic,
+                    title: const CardText(
+                      'Unbounded Constraints',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    description: const [CardText('Infinite constraints explained')],
+                    enableTag: true,
+                    tag: 'Common error',
+                    tagColor: const Color(0xFF932925),
+                    tagContainerColor: const Color(0xFFFCEBEB),
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

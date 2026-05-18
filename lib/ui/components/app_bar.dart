@@ -9,6 +9,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleSize = 12,
     this.subtitleSize = 16,
     this.fallBackButton = true,
+    this.logoutButton = false,
+    this.onLogout,
   });
 
   final String title;
@@ -16,6 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? titleSize;
   final double? subtitleSize;
   final bool fallBackButton;
+  final bool logoutButton;
+  final VoidCallback? onLogout;
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
@@ -25,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
-      toolbarHeight: 80,
+      toolbarHeight: 80 + MediaQuery.of(context).padding.top,
       leading: fallBackButton
           ? GestureDetector(
               onTap: () => context.router.maybePop(),
@@ -42,6 +46,51 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             )
+          : null,
+      actions: logoutButton
+          ? [
+              GestureDetector(
+                onTap: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Logout'),
+                      content: const Text('Proceed to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: const Text(
+                            'Yes',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirm == true) {
+                    onLogout?.call();
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEEEDFE),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.logout_rounded,
+                    color: Color(0xFF534AB7),
+                    size: 20,
+                  ),
+                ),
+              ),
+            ]
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
