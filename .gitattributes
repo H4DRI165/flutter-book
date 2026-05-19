@@ -1,0 +1,5 @@
+*.cpp linguist-vendored=true
+*.c linguist-vendored=true
+*.cmake linguist-vendored=true
+*.swift linguist-vendored=true
+*.html linguist-vendored=true
