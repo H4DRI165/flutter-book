@@ -8,148 +8,177 @@
 // ignore_for_file: type=lint
 // coverage:ignore-file
 
-part of 'routes.dart';
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:flutter_book/ui/ft_auth/pg_forgot_password/page.dart' as _i5;
+import 'package:flutter_book/ui/ft_auth/pg_login/page.dart' as _i7;
+import 'package:flutter_book/ui/ft_auth/pg_register/page.dart' as _i9;
+import 'package:flutter_book/ui/ft_main/pg_landing/page.dart' as _i6;
+import 'package:flutter_book/ui/ft_main/pg_splash/page.dart' as _i10;
+import 'package:flutter_book/ui/ft_menu/ft_featured/pg_constraints_intro/page.dart'
+    as _i1;
+import 'package:flutter_book/ui/ft_menu/ft_topics/pg_loose/page.dart' as _i2;
+import 'package:flutter_book/ui/ft_menu/ft_topics/pg_tight/page.dart' as _i3;
+import 'package:flutter_book/ui/ft_menu/ft_topics/pg_unbounded/page.dart'
+    as _i4;
+import 'package:flutter_book/ui/ft_menu/pg_main_menu/page.dart' as _i8;
 
 /// generated route for
-/// [ConstrainIntroPage]
-class ConstrainIntroRoute extends PageRouteInfo<void> {
-  const ConstrainIntroRoute({List<PageRouteInfo>? children})
+/// [_i1.ConstrainIntroPage]
+class ConstrainIntroRoute extends _i11.PageRouteInfo<void> {
+  const ConstrainIntroRoute({List<_i11.PageRouteInfo>? children})
     : super(ConstrainIntroRoute.name, initialChildren: children);
 
   static const String name = 'ConstrainIntroRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const ConstrainIntroPage();
+      return const _i1.ConstrainIntroPage();
     },
   );
 }
 
 /// generated route for
-/// [ConstrainLoosePage]
-class ConstrainLooseRoute extends PageRouteInfo<void> {
-  const ConstrainLooseRoute({List<PageRouteInfo>? children})
+/// [_i2.ConstrainLoosePage]
+class ConstrainLooseRoute extends _i11.PageRouteInfo<void> {
+  const ConstrainLooseRoute({List<_i11.PageRouteInfo>? children})
     : super(ConstrainLooseRoute.name, initialChildren: children);
 
   static const String name = 'ConstrainLooseRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const ConstrainLoosePage();
+      return const _i2.ConstrainLoosePage();
     },
   );
 }
 
 /// generated route for
-/// [ConstrainTightPage]
-class ConstrainTightRoute extends PageRouteInfo<void> {
-  const ConstrainTightRoute({List<PageRouteInfo>? children})
+/// [_i3.ConstrainTightPage]
+class ConstrainTightRoute extends _i11.PageRouteInfo<void> {
+  const ConstrainTightRoute({List<_i11.PageRouteInfo>? children})
     : super(ConstrainTightRoute.name, initialChildren: children);
 
   static const String name = 'ConstrainTightRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const ConstrainTightPage();
+      return const _i3.ConstrainTightPage();
     },
   );
 }
 
 /// generated route for
-/// [ConstrainUnboundedPage]
-class ConstrainUnboundedRoute extends PageRouteInfo<void> {
-  const ConstrainUnboundedRoute({List<PageRouteInfo>? children})
+/// [_i4.ConstrainUnboundedPage]
+class ConstrainUnboundedRoute extends _i11.PageRouteInfo<void> {
+  const ConstrainUnboundedRoute({List<_i11.PageRouteInfo>? children})
     : super(ConstrainUnboundedRoute.name, initialChildren: children);
 
   static const String name = 'ConstrainUnboundedRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const ConstrainUnboundedPage();
+      return const _i4.ConstrainUnboundedPage();
     },
   );
 }
 
 /// generated route for
-/// [ForgotPasswordPage]
-class ForgotPasswordRoute extends PageRouteInfo<void> {
-  const ForgotPasswordRoute({List<PageRouteInfo>? children})
+/// [_i5.ForgotPasswordPage]
+class ForgotPasswordRoute extends _i11.PageRouteInfo<void> {
+  const ForgotPasswordRoute({List<_i11.PageRouteInfo>? children})
     : super(ForgotPasswordRoute.name, initialChildren: children);
 
   static const String name = 'ForgotPasswordRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const ForgotPasswordPage();
+      return const _i5.ForgotPasswordPage();
     },
   );
 }
 
 /// generated route for
-/// [LandingPage]
-class LandingRoute extends PageRouteInfo<void> {
-  const LandingRoute({List<PageRouteInfo>? children})
+/// [_i6.LandingPage]
+class LandingRoute extends _i11.PageRouteInfo<void> {
+  const LandingRoute({List<_i11.PageRouteInfo>? children})
     : super(LandingRoute.name, initialChildren: children);
 
   static const String name = 'LandingRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const LandingPage();
+      return const _i6.LandingPage();
     },
   );
 }
 
 /// generated route for
-/// [LoginPage]
-class LoginRoute extends PageRouteInfo<void> {
-  const LoginRoute({List<PageRouteInfo>? children})
+/// [_i7.LoginPage]
+class LoginRoute extends _i11.PageRouteInfo<void> {
+  const LoginRoute({List<_i11.PageRouteInfo>? children})
     : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const LoginPage();
+      return const _i7.LoginPage();
     },
   );
 }
 
 /// generated route for
-/// [MainMenuPage]
-class MainMenuRoute extends PageRouteInfo<void> {
-  const MainMenuRoute({List<PageRouteInfo>? children})
+/// [_i8.MainMenuPage]
+class MainMenuRoute extends _i11.PageRouteInfo<void> {
+  const MainMenuRoute({List<_i11.PageRouteInfo>? children})
     : super(MainMenuRoute.name, initialChildren: children);
 
   static const String name = 'MainMenuRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const MainMenuPage();
+      return const _i8.MainMenuPage();
     },
   );
 }
 
 /// generated route for
-/// [RegisterPage]
-class RegisterRoute extends PageRouteInfo<void> {
-  const RegisterRoute({List<PageRouteInfo>? children})
+/// [_i9.RegisterPage]
+class RegisterRoute extends _i11.PageRouteInfo<void> {
+  const RegisterRoute({List<_i11.PageRouteInfo>? children})
     : super(RegisterRoute.name, initialChildren: children);
 
   static const String name = 'RegisterRoute';
 
-  static PageInfo page = PageInfo(
+  static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      return const RegisterPage();
+      return const _i9.RegisterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [_i10.SplashPage]
+class SplashRoute extends _i11.PageRouteInfo<void> {
+  const SplashRoute({List<_i11.PageRouteInfo>? children})
+    : super(SplashRoute.name, initialChildren: children);
+
+  static const String name = 'SplashRoute';
+
+  static _i11.PageInfo page = _i11.PageInfo(
+    name,
+    builder: (data) {
+      return const _i10.SplashPage();
     },
   );
 }

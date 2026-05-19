@@ -7,7 +7,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'ui/ft_auth/repository/auth_repository.dart';
 import 'ui/routes/routes.dart';
 
-final _appRouter = AppRouter();
+final _authRepository = AuthRepository();
+final _appRouter = AppRouter(authRepository: _authRepository);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,7 @@ void main() async {
 
   runApp(
     RepositoryProvider(
-      create: (_) => AuthRepository(),
+      create: (_) => _authRepository,
       child: const MainApp(),
     ),
   );
