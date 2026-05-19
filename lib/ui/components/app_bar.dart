@@ -5,13 +5,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
+    this.titleSize = 12,
+    this.subtitleSize = 16,
     this.fallBackButton = true,
+    this.logoutButton = false,
+    this.onLogout,
+    this.showProfile = false,
+    this.onProfileTap,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final double? titleSize;
+  final double? subtitleSize;
   final bool fallBackButton;
+  final bool logoutButton;
+  final VoidCallback? onLogout;
+  final bool showProfile;
+  final VoidCallback? onProfileTap;
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
@@ -38,26 +50,88 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             )
+          : showProfile
+          ? GestureDetector(
+              onTap: onProfileTap,
+              child: Container(
+                margin: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEEEDFE),
+                ),
+                child: const Icon(
+                  Icons.person_outline_rounded,
+                  size: 20,
+                  color: Color(0xFF534AB7),
+                ),
+              ),
+            )
+          : null,
+      actions: logoutButton
+          ? [
+              GestureDetector(
+                onTap: () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Logout'),
+                      content: const Text('Proceed to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (confirm == true) {
+                    onLogout?.call();
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEEEDFE),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.logout_rounded,
+                    color: Color(0xFF534AB7),
+                    size: 20,
+                  ),
+                ),
+              ),
+            ]
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
+            style: TextStyle(
+              fontSize: titleSize,
+              color: const Color(0xFFEFEEEB),
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w400,
+          if (subtitle != null)
+            Text(
+              subtitle!,
+              style: TextStyle(
+                fontSize: subtitleSize,
+                color: const Color(0xFFC2C0B6),
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
         ],
       ),
     );

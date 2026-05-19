@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+.env
 
 # IntelliJ related
 *.iml
@@ -34,3 +35,8 @@ build/
 
 # FVM Version Cache
 .fvm/
+
+# Generated plugin registrant files
+linux/flutter/generated_*
+macos/Flutter/Generated*
+windows/flutter/generated_*

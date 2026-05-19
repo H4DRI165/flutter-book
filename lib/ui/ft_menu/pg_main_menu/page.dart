@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../app.dart';
+import 'bloc/main_menu_bloc.dart';
 
 @RoutePage()
 class MainMenuPage extends StatelessWidget {
@@ -9,13 +11,47 @@ class MainMenuPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
-        title: 'Welcome back',
-        subtitle: 'Flutter Book',
-        fallBackButton: false,
+    return BlocProvider(
+      create: (context) => MainMenuBloc(
+        authRepository: context.read<AuthRepository>(),
       ),
-      body: Content(),
+      child: BlocListener<MainMenuBloc, MainMenuState>(
+        listener: (context, state) {
+          if (state.status == MainMenuStatus.loggedOut) {
+            context.router.replace(const LoginRoute());
+          } else if (state.status == MainMenuStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Failed to log out. Please try again.'),
+              ),
+            );
+          }
+        },
+        child: Builder(
+          builder: (context) {
+            return Scaffold(
+              appBar: CustomAppBar(
+                title: 'Welcome back',
+                subtitle: 'Flutter Book',
+                fallBackButton: false,
+                logoutButton: true,
+                onLogout: () {
+                  context.read<MainMenuBloc>().add(
+                    const MainMenuLogoutPressed(),
+                  );
+                },
+                showProfile: true,
+                onProfileTap: () {
+                  context.router.push(const ProfileRoute());
+                },
+              ),
+              body: const SafeArea(
+                child: Content(),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -29,7 +65,10 @@ class Content extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [FeaturedSection(), TopicSection()],
+        children: [
+          FeaturedSection(),
+          TopicSection(),
+        ],
       ),
     );
   }
@@ -41,7 +80,7 @@ class FeaturedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,34 +94,38 @@ class FeaturedSection extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           CardItem(
-            icon: Icons.arrow_downward_rounded,
+            icon: Icons.dashboard_outlined,
             variant: CardVariant.featured,
             title: const CardText(
               'Constraints',
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            description: const [CardText('How parent passes size rules to child widgets')],
+            description: const [
+              CardText('How parent passes size rules to child widgets'),
+            ],
             progressBarValue: 0.6,
             progressBarColor: Colors.purple,
             onTap: () async {
-              await context.pushRoute(const ConstrainRoute());
+              await context.pushRoute(const ConstrainIntroRoute());
             },
           ),
           const SizedBox(height: 10),
           CardItem(
-            icon: Icons.arrow_downward_rounded,
+            icon: Icons.account_tree_outlined,
             variant: CardVariant.featured,
             title: const CardText(
               'Widget tree',
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            description: const [CardText('Understanding parent, child and render objects')],
+            description: const [
+              CardText('Understanding parent, child and render objects'),
+            ],
             progressBarValue: 0.2,
             progressBarColor: Colors.green,
-            onTap: () async {
-              await context.pushRoute(const ConstrainRoute());
+            onTap: () {
+              // WIP: implement widget tree page
             },
           ),
         ],
@@ -116,43 +159,81 @@ class TopicSection extends StatelessWidget {
               children: [
                 Expanded(
                   child: CardItem(
-                    icon: Icons.arrow_downward_rounded,
-                    iconColor: Colors.blue,
+                    icon: Icons.lock,
                     variant: CardVariant.topic,
                     title: const CardText(
-                      'Tight vs Loose',
+                      'Tight constraints',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                     description: const [CardText('When min equals max')],
                     enableTag: true,
                     tag: 'Layout',
-                    tagColor: Colors.blueAccent,
-                    onTap: () {},
+                    tagContainerColor: Colors.blueAccent,
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainTightRoute(showNextButton: false),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 20),
                 Expanded(
                   child: CardItem(
-                    icon: Icons.arrow_downward_rounded,
-                    iconColor: Colors.green,
+                    icon: Icons.zoom_out_map_rounded,
                     variant: CardVariant.topic,
                     title: const CardText(
-                      'Unbounded',
+                      'Loose constraints',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                    description: const [CardText('Infinite constraints explained')],
+                    description: const [CardText('Child picks its size')],
                     enableTag: true,
-                    tag: 'Common error',
-                    tagColor: Colors.yellowAccent,
-                    onTap: () {},
+                    tag: 'Layout',
+                    tagContainerColor: Colors.blueAccent,
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainLooseRoute(showNextButton: false),
+                      );
+                    },
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 10),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: CardItem(
+                    icon: Icons.warning_amber_rounded,
+                    iconColor: const Color(0XFFA3323B),
+                    containerColor: const Color(0xFFFCEBEB),
+                    variant: CardVariant.topic,
+                    title: const CardText(
+                      'Unbounded Constraints',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    description: const [
+                      CardText('Infinite constraints explained'),
+                    ],
+                    enableTag: true,
+                    tag: 'Common error',
+                    tagColor: const Color(0xFF932925),
+                    tagContainerColor: const Color(0xFFFCEBEB),
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainUnboundedRoute(showNextButton: false),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -4,24 +4,28 @@ import 'package:flutter/material.dart';
 import '../../../app.dart';
 
 @RoutePage()
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: InkWell(
-          onTap: () {
-            _handleTap(context);
-          },
-          child: const Text('Landing Page'),
-        ),
-      ),
-    );
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.replaceRoute(const LoginRoute());
+    });
   }
 
-  Future<void> _handleTap(BuildContext context) async {
-    await context.pushRoute(const MainMenuRoute());
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }
