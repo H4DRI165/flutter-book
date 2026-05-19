@@ -64,6 +64,28 @@ class AuthRepository {
     );
   }
 
+  Future<String> uploadAvatar(File imageFile) async {
+    final userId = currentUser!.id;
+    final path = '$userId/avatar.jpg';
+
+    await _supabase.storage
+        .from('avatars')
+        .upload(
+          path,
+          imageFile,
+          fileOptions: const FileOptions(upsert: true),
+        );
+
+    final url = _supabase.storage.from('avatars').getPublicUrl(path);
+
+    // save url to user metadata
+    await _supabase.auth.updateUser(
+      UserAttributes(data: {'avatar_url': url}),
+    );
+
+    return url;
+  }
+
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }

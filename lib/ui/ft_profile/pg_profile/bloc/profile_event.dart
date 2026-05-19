@@ -11,6 +11,18 @@ class ProfileLoadRequested extends ProfileEvent {
   const ProfileLoadRequested();
 }
 
+class ProfileImagePicked extends ProfileEvent {
+  const ProfileImagePicked(this.imageFile);
+  final File imageFile;
+
+  @override
+  List<Object?> get props => [imageFile];
+}
+
+class ProfileImageConfirmed extends ProfileEvent {
+  const ProfileImageConfirmed();
+}
+
 class ProfileFullNameChanged extends ProfileEvent {
   const ProfileFullNameChanged(this.fullName);
   final String fullName;

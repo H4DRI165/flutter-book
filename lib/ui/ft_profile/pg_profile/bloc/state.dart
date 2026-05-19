@@ -7,32 +7,36 @@ class ProfilePageState extends Equatable {
     this.status = ProfileStatus.initial,
     this.fullName = '',
     this.email = '',
-    this.createdAt = '',
+    this.avatarUrl,
+    this.pickedImage,
     this.errorMessage,
   });
 
   final ProfileStatus status;
   final String fullName;
   final String email;
-  final String createdAt;
+  final String? avatarUrl;
+  final File? pickedImage;
   final String? errorMessage;
 
   ProfilePageState copyWith({
     ProfileStatus? status,
     String? fullName,
     String? email,
-    String? createdAt,
+    String? avatarUrl,
+    File? pickedImage,
     String? errorMessage,
   }) {
     return ProfilePageState(
       status: status ?? this.status,
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,
-      createdAt: createdAt ?? this.createdAt,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      pickedImage: pickedImage ?? this.pickedImage,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 
   @override
-  List<Object?> get props => [status, fullName, email, createdAt, errorMessage];
+  List<Object?> get props => [status, fullName, email, avatarUrl, pickedImage, errorMessage];
 }
