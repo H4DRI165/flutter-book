@@ -186,8 +186,10 @@ class _BodyContentState extends State<_BodyContent> {
           const SizedBox(height: 20),
           BlocBuilder<LoginBloc, LoginPageState>(
             buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) => _LoginButton(
+            builder: (context, state) => AppButton(
+              label: 'Sign in',
               isLoading: state.status == LoginStatus.loading,
+              containerColor: const Color(0xFF534ab7),
               onTap: () {
                 context.read<LoginBloc>().add(const LoginSubmitted());
               },
@@ -201,55 +203,6 @@ class _BodyContentState extends State<_BodyContent> {
           const Spacer(),
           const _SignUpRow(),
         ],
-      ),
-    );
-  }
-}
-
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({
-    required this.isLoading,
-    required this.onTap,
-  });
-
-  final bool isLoading;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : onTap,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.0,
-          ),
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 40,
-          child: Center(
-            child: isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Text(
-                    'Sign in',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-          ),
-        ),
       ),
     );
   }

@@ -5,7 +5,9 @@ import '../../../../app.dart';
 
 @RoutePage()
 class ConstrainUnboundedPage extends StatefulWidget {
-  const ConstrainUnboundedPage({super.key});
+  const ConstrainUnboundedPage({super.key, this.showNextButton = false});
+
+  final bool showNextButton;
 
   @override
   State<ConstrainUnboundedPage> createState() => _ConstrainUnboundedPageState();
@@ -14,20 +16,22 @@ class ConstrainUnboundedPage extends StatefulWidget {
 class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
+    return Scaffold(
+      appBar: const CustomAppBar(
         title: 'Unbounded Constraints',
         titleSize: 16,
         subtitle: 'Drag sliders to see overflow',
         subtitleSize: 13,
       ),
-      body: _BodyContent(),
+      body: _BodyContent(showNextButton: widget.showNextButton),
     );
   }
 }
 
 class _BodyContent extends StatefulWidget {
-  const _BodyContent();
+  const _BodyContent({required this.showNextButton});
+
+  final bool showNextButton;
 
   @override
   State<_BodyContent> createState() => _BodyContentState();
@@ -65,10 +69,13 @@ class _BodyContentState extends State<_BodyContent> {
           const SizedBox(height: 8),
           const _InfoCard(),
           const Spacer(),
-          AppButton(
-            label: 'Main Menu',
-            onTap: () {},
-          ),
+          if (widget.showNextButton)
+            AppButton(
+              label: 'Main Menu',
+              onTap: () {
+                context.router.replace(const MainMenuRoute());
+              },
+            ),
         ],
       ),
     );
@@ -273,7 +280,7 @@ class _MetricCards extends StatelessWidget {
                 const SizedBox(height: 6),
                 const Text(
                   'H: 0 → ∞',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),

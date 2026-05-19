@@ -38,5 +38,9 @@ class AppRouter extends RootStackRouter {
       page: ConstrainUnboundedRoute.page,
       guards: [AuthGuard(authRepository: authRepository)],
     ),
+    AutoRoute(
+      page: ProfileRoute.page,
+      guards: [AuthGuard(authRepository: authRepository)],
+    ),
   ];
 }

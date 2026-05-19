@@ -28,10 +28,18 @@ class MainMenuPage extends StatelessWidget {
                 fallBackButton: false,
                 logoutButton: true,
                 onLogout: () {
-                  context.read<MainMenuBloc>().add(const MainMenuLogoutPressed());
+                  context.read<MainMenuBloc>().add(
+                    const MainMenuLogoutPressed(),
+                  );
+                },
+                showProfile: true,
+                onProfileTap: () {
+                  context.router.push(const ProfileRoute());
                 },
               ),
-              body: const Content(),
+              body: const SafeArea(
+                child: Content(),
+              ),
             );
           },
         ),
@@ -49,7 +57,10 @@ class Content extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [FeaturedSection(), TopicSection()],
+        children: [
+          FeaturedSection(),
+          TopicSection(),
+        ],
       ),
     );
   }
@@ -61,7 +72,7 @@ class FeaturedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -82,7 +93,9 @@ class FeaturedSection extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            description: const [CardText('How parent passes size rules to child widgets')],
+            description: const [
+              CardText('How parent passes size rules to child widgets'),
+            ],
             progressBarValue: 0.6,
             progressBarColor: Colors.purple,
             onTap: () async {
@@ -98,7 +111,9 @@ class FeaturedSection extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            description: const [CardText('Understanding parent, child and render objects')],
+            description: const [
+              CardText('Understanding parent, child and render objects'),
+            ],
             progressBarValue: 0.2,
             progressBarColor: Colors.green,
             onTap: () async {
@@ -147,7 +162,11 @@ class TopicSection extends StatelessWidget {
                     enableTag: true,
                     tag: 'Layout',
                     tagContainerColor: Colors.blueAccent,
-                    onTap: () {},
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainTightRoute(showNextButton: false),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -163,8 +182,12 @@ class TopicSection extends StatelessWidget {
                     description: const [CardText('Child picks its size')],
                     enableTag: true,
                     tag: 'Layout',
-                    tagContainerColor: Colors.yellowAccent,
-                    onTap: () {},
+                    tagContainerColor: Colors.blueAccent,
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainLooseRoute(showNextButton: false),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -178,7 +201,7 @@ class TopicSection extends StatelessWidget {
                 Expanded(
                   child: CardItem(
                     icon: Icons.warning_amber_rounded,
-                    iconColor: Color(0XFFA3323B),
+                    iconColor: const Color(0XFFA3323B),
                     containerColor: const Color(0xFFFCEBEB),
                     variant: CardVariant.topic,
                     title: const CardText(
@@ -186,12 +209,18 @@ class TopicSection extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
-                    description: const [CardText('Infinite constraints explained')],
+                    description: const [
+                      CardText('Infinite constraints explained'),
+                    ],
                     enableTag: true,
                     tag: 'Common error',
                     tagColor: const Color(0xFF932925),
                     tagContainerColor: const Color(0xFFFCEBEB),
-                    onTap: () {},
+                    onTap: () {
+                      context.pushRoute(
+                        ConstrainUnboundedRoute(showNextButton: false),
+                      );
+                    },
                   ),
                 ),
               ],

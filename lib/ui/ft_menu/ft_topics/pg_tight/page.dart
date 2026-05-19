@@ -5,8 +5,12 @@ import '../../../../app.dart';
 
 @RoutePage()
 class ConstrainTightPage extends StatefulWidget {
-  const ConstrainTightPage({super.key});
+  const ConstrainTightPage({
+    super.key,
+    this.showNextButton = false,
+  });
 
+  final bool showNextButton;
   @override
   State<ConstrainTightPage> createState() => _ConstrainTightPageState();
 }
@@ -14,20 +18,22 @@ class ConstrainTightPage extends StatefulWidget {
 class _ConstrainTightPageState extends State<ConstrainTightPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
+    return Scaffold(
+      appBar: const CustomAppBar(
         title: 'Tight Constraints',
         titleSize: 16,
         subtitle: 'Drag sliders to explore the range',
         subtitleSize: 13,
       ),
-      body: _BodyContent(),
+      body: _BodyContent(showNextButton: widget.showNextButton),
     );
   }
 }
 
 class _BodyContent extends StatefulWidget {
-  const _BodyContent();
+  const _BodyContent({required this.showNextButton});
+
+  final bool showNextButton;
 
   @override
   State<_BodyContent> createState() => _BodyContentState();
@@ -65,12 +71,16 @@ class _BodyContentState extends State<_BodyContent> {
           const SizedBox(height: 8),
           const _InfoCard(),
           const Spacer(),
-          AppButton(
-            label: 'Next: loose',
-            onTap: () {
-              context.pushRoute(const ConstrainLooseRoute());
-            },
-          ),
+          if (widget.showNextButton)
+            AppButton(
+              label: 'Next: loose',
+              enableIcon: true,
+              onTap: () {
+                context.pushRoute(
+                  ConstrainLooseRoute(showNextButton: widget.showNextButton),
+                );
+              },
+            ),
         ],
       ),
     );

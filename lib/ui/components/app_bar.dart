@@ -11,6 +11,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.fallBackButton = true,
     this.logoutButton = false,
     this.onLogout,
+    this.showProfile = false,
+    this.onProfileTap,
   });
 
   final String title;
@@ -20,6 +22,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool fallBackButton;
   final bool logoutButton;
   final VoidCallback? onLogout;
+  final bool showProfile;
+  final VoidCallback? onProfileTap;
 
   @override
   Size get preferredSize => const Size.fromHeight(80);
@@ -46,6 +50,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
             )
+          : showProfile
+          ? GestureDetector(
+              onTap: onProfileTap,
+              child: Container(
+                margin: const EdgeInsets.all(12),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEEEDFE),
+                ),
+                child: const Icon(
+                  Icons.person_outline_rounded,
+                  size: 20,
+                  color: Color(0xFF534AB7),
+                ),
+              ),
+            )
           : null,
       actions: logoutButton
           ? [
@@ -64,7 +84,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         TextButton(
                           onPressed: () => Navigator.pop(context, true),
                           child: const Text(
-                            'Yes',
+                            'Logout',
                             style: TextStyle(color: Colors.red),
                           ),
                         ),

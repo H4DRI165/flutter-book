@@ -22,7 +22,7 @@ class ConstrainIntroPage extends StatelessWidget {
 }
 
 class _BodyContent extends StatelessWidget {
-  const _BodyContent({super.key});
+  const _BodyContent();
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +99,11 @@ class _BodyContent extends StatelessWidget {
           const Spacer(),
           AppButton(
             label: 'Start exploring',
+            enableIcon: true,
             onTap: () async {
-              await context.pushRoute(const ConstrainTightRoute());
+              await context.pushRoute(
+                ConstrainTightRoute(showNextButton: true),
+              );
             },
           ),
           const SizedBox(height: 30),

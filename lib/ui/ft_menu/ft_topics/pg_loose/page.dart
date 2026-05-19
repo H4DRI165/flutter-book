@@ -5,7 +5,12 @@ import '../../../../app.dart';
 
 @RoutePage()
 class ConstrainLoosePage extends StatefulWidget {
-  const ConstrainLoosePage({super.key});
+  const ConstrainLoosePage({
+    super.key,
+    this.showNextButton = false,
+  });
+
+  final bool showNextButton;
 
   @override
   State<ConstrainLoosePage> createState() => _ConstrainLoosePageState();
@@ -14,20 +19,22 @@ class ConstrainLoosePage extends StatefulWidget {
 class _ConstrainLoosePageState extends State<ConstrainLoosePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
+    return Scaffold(
+      appBar: const CustomAppBar(
         title: 'Loose Constraints',
         titleSize: 16,
         subtitle: 'Drag sliders to explore the range',
         subtitleSize: 13,
       ),
-      body: _BodyContent(),
+      body: _BodyContent(showNextButton: widget.showNextButton),
     );
   }
 }
 
 class _BodyContent extends StatefulWidget {
-  const _BodyContent();
+  const _BodyContent({required this.showNextButton});
+
+  final bool showNextButton;
 
   @override
   State<_BodyContent> createState() => _BodyContentState();
@@ -65,12 +72,16 @@ class _BodyContentState extends State<_BodyContent> {
           const SizedBox(height: 8),
           const _InfoCard(),
           const Spacer(),
-          AppButton(
-            label: 'Next: unbounded',
-            onTap: () {
-              context.pushRoute(const ConstrainUnboundedRoute());
-            },
-          ),
+          if (widget.showNextButton)
+            AppButton(
+              label: 'Next: unbounded',
+              enableIcon: true,
+              onTap: () {
+                context.pushRoute(
+                  ConstrainUnboundedRoute(showNextButton: widget.showNextButton),
+                );
+              },
+            ),
         ],
       ),
     );

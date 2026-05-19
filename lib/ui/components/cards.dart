@@ -19,7 +19,7 @@ class CardText {
 }
 
 class CardItem extends StatelessWidget {
-  CardItem({
+  const CardItem({
     super.key,
     required this.icon,
     required this.variant,

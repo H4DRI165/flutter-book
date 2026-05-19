@@ -214,8 +214,10 @@ class _BodyContentState extends State<_BodyContent> {
           const SizedBox(height: 20),
           BlocBuilder<RegisterBloc, RegisterPageState>(
             buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) => _RegisterButton(
+            builder: (context, state) => AppButton(
+              label: 'Create account',
               isLoading: state.status == RegisterStatus.loading,
+              containerColor: const Color(0xFF534ab7),
               onTap: () {
                 context.read<RegisterBloc>().add(const RegisterSubmitted());
               },
@@ -228,56 +230,6 @@ class _BodyContentState extends State<_BodyContent> {
           const Spacer(),
           const _LoginRow(),
         ],
-      ),
-    );
-  }
-}
-
-class _RegisterButton extends StatelessWidget {
-  const _RegisterButton({
-    required this.isLoading,
-    required this.onTap,
-  });
-
-  final bool isLoading;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : onTap,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: const Color(0xFF534ab7),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: const Color(0xFF534ab7),
-            width: 1.0,
-          ),
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          height: 40,
-          child: Center(
-            child: isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Text(
-                    'Create account',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-          ),
-        ),
       ),
     );
   }

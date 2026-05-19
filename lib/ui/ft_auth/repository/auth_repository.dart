@@ -56,6 +56,14 @@ class AuthRepository {
     await _supabase.auth.resetPasswordForEmail(email);
   }
 
+  Future<void> updateProfile({required String fullName}) async {
+    await _supabase.auth.updateUser(
+      UserAttributes(
+        data: {'full_name': fullName},
+      ),
+    );
+  }
+
   Future<void> signOut() async {
     await _supabase.auth.signOut();
   }
