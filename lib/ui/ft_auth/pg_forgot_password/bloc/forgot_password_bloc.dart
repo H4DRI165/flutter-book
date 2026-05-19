@@ -24,14 +24,21 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordPageSta
     ForgotPasswordEmailChanged event,
     Emitter<ForgotPasswordPageState> emit,
   ) {
-    emit(state.copyWith(email: event.email, emailError: null));
+    emit(
+      state.copyWith(
+        email: event.email,
+        emailError: null,
+        errorMessage: null,
+        status: Status.initial,
+      ),
+    );
   }
 
   Future<void> _onSubmitted(
     ForgotPasswordSubmitted event,
     Emitter<ForgotPasswordPageState> emit,
   ) async {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
     final emailError = state.email.isEmpty
         ? 'Email is required.'
@@ -40,7 +47,13 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordPageSta
         : null;
 
     if (emailError != null) {
-      emit(state.copyWith(emailError: emailError));
+      emit(
+        state.copyWith(
+          status: Status.initial,
+          emailError: emailError,
+          errorMessage: null,
+        ),
+      );
       return;
     }
 

@@ -25,14 +25,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginPageState> {
     LoginEmailChanged event,
     Emitter<LoginPageState> emit,
   ) {
-    emit(state.copyWith(email: event.email, emailError: null));
+    emit(
+      state.copyWith(
+        email: event.email,
+        emailError: null,
+        errorMessage: null,
+        status: LoginStatus.initial,
+      ),
+    );
   }
 
   void _onPasswordChanged(
     LoginPasswordChanged event,
     Emitter<LoginPageState> emit,
   ) {
-    emit(state.copyWith(password: event.password, passwordError: null));
+    emit(
+      state.copyWith(
+        password: event.password,
+        passwordError: null,
+        errorMessage: null,
+        status: LoginStatus.initial,
+      ),
+    );
   }
 
   void _onObscurePasswordToggled(
@@ -46,7 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginPageState> {
     LoginSubmitted event,
     Emitter<LoginPageState> emit,
   ) async {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
     final emailError = state.email.isEmpty
         ? 'Email is required.'
@@ -59,8 +73,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginPageState> {
     if (emailError != null || passwordError != null) {
       emit(
         state.copyWith(
+          status: LoginStatus.initial,
           emailError: emailError,
           passwordError: passwordError,
+          errorMessage: null,
         ),
       );
       return;

@@ -43,6 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
         },
         child: const SafeArea(
           child: Scaffold(
+            resizeToAvoidBottomInset: true,
             body: Padding(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -84,7 +85,7 @@ class _Header extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text(
-          'Start your learning your journey today',
+          'Start your learning journey today',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
@@ -119,117 +120,120 @@ class _BodyContentState extends State<_BodyContent> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          BlocBuilder<RegisterBloc, RegisterPageState>(
-            buildWhen: (previous, current) => previous.emailError != current.emailError,
-            builder: (context, state) {
-              return AppTextField(
-                controller: _emailController,
-                labelText: 'Email your email',
-                hintText: 'Enter your email',
-                border: AppFormFieldBorder.roundedOutlined,
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                errorText: state.emailError,
-                clearable: true,
-                onChanged: (value) {
-                  context.read<RegisterBloc>().add(RegisterEmailChanged(value));
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          BlocBuilder<RegisterBloc, RegisterPageState>(
-            buildWhen: (previous, current) =>
-                previous.obscurePassword != current.obscurePassword || previous.passwordError != current.passwordError,
-            builder: (context, state) {
-              return AppTextField(
-                controller: _passwordController,
-                labelText: 'Create a password',
-                hintText: 'Create a password',
-                border: AppFormFieldBorder.roundedOutlined,
-                prefixIcon: const Icon(
-                  Icons.lock_outlined,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                errorText: state.passwordError,
-                obscureText: state.obscurePassword,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    state.obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+      child: IntrinsicHeight(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            BlocBuilder<RegisterBloc, RegisterPageState>(
+              buildWhen: (previous, current) => previous.emailError != current.emailError,
+              builder: (context, state) {
+                return AppTextField(
+                  controller: _emailController,
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  border: AppFormFieldBorder.roundedOutlined,
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                    size: 20,
+                    color: Colors.grey,
                   ),
-                  onPressed: () {
-                    context.read<RegisterBloc>().add(const RegisterObscurePasswordToggled());
+                  errorText: state.emailError,
+                  clearable: true,
+                  onChanged: (value) {
+                    context.read<RegisterBloc>().add(RegisterEmailChanged(value));
                   },
-                ),
-                onChanged: (value) {
-                  context.read<RegisterBloc>().add(RegisterPasswordChanged(value));
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          BlocBuilder<RegisterBloc, RegisterPageState>(
-            buildWhen: (previous, current) =>
-                previous.obscureConfirmPassword != current.obscureConfirmPassword ||
-                previous.confirmPasswordError != current.confirmPasswordError,
-            builder: (context, state) {
-              return AppTextField(
-                controller: _confirmPasswordController,
-                labelText: 'Confirm your password',
-                hintText: 'Confirm your password',
-                border: AppFormFieldBorder.roundedOutlined,
-                prefixIcon: const Icon(
-                  Icons.lock_outlined,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                errorText: state.confirmPasswordError,
-                obscureText: state.obscureConfirmPassword,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    state.obscureConfirmPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                  ),
-                  onPressed: () {
-                    context.read<RegisterBloc>().add(
-                      const RegisterObscureConfirmPasswordToggled(),
-                    );
-                  },
-                ),
-                onChanged: (value) {
-                  context.read<RegisterBloc>().add(
-                    RegisterConfirmPasswordChanged(value),
-                  );
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          BlocBuilder<RegisterBloc, RegisterPageState>(
-            buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) => AppButton(
-              label: 'Create account',
-              isLoading: state.status == RegisterStatus.loading,
-              containerColor: const Color(0xFF534ab7),
-              onTap: () {
-                context.read<RegisterBloc>().add(const RegisterSubmitted());
+                );
               },
             ),
-          ),
-          const SizedBox(height: 20),
-          const _Divider(),
-          const SizedBox(height: 20),
-          const _GoogleButton(),
-          const Spacer(),
-          const _LoginRow(),
-        ],
+            const SizedBox(height: 16),
+            BlocBuilder<RegisterBloc, RegisterPageState>(
+              buildWhen: (previous, current) =>
+                  previous.obscurePassword != current.obscurePassword ||
+                  previous.passwordError != current.passwordError,
+              builder: (context, state) {
+                return AppTextField(
+                  controller: _passwordController,
+                  labelText: 'Password',
+                  hintText: 'Create a password',
+                  border: AppFormFieldBorder.roundedOutlined,
+                  prefixIcon: const Icon(
+                    Icons.lock_outlined,
+                    size: 20,
+                    color: Colors.grey,
+                  ),
+                  errorText: state.passwordError,
+                  obscureText: state.obscurePassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      state.obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    ),
+                    onPressed: () {
+                      context.read<RegisterBloc>().add(const RegisterObscurePasswordToggled());
+                    },
+                  ),
+                  onChanged: (value) {
+                    context.read<RegisterBloc>().add(RegisterPasswordChanged(value));
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<RegisterBloc, RegisterPageState>(
+              buildWhen: (previous, current) =>
+                  previous.obscureConfirmPassword != current.obscureConfirmPassword ||
+                  previous.confirmPasswordError != current.confirmPasswordError,
+              builder: (context, state) {
+                return AppTextField(
+                  controller: _confirmPasswordController,
+                  labelText: 'Confirm Password',
+                  hintText: 'Confirm your password',
+                  border: AppFormFieldBorder.roundedOutlined,
+                  prefixIcon: const Icon(
+                    Icons.lock_outlined,
+                    size: 20,
+                    color: Colors.grey,
+                  ),
+                  errorText: state.confirmPasswordError,
+                  obscureText: state.obscureConfirmPassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      state.obscureConfirmPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    ),
+                    onPressed: () {
+                      context.read<RegisterBloc>().add(
+                        const RegisterObscureConfirmPasswordToggled(),
+                      );
+                    },
+                  ),
+                  onChanged: (value) {
+                    context.read<RegisterBloc>().add(
+                      RegisterConfirmPasswordChanged(value),
+                    );
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            BlocBuilder<RegisterBloc, RegisterPageState>(
+              buildWhen: (previous, current) => previous.status != current.status,
+              builder: (context, state) => AppButton(
+                label: 'Create account',
+                isLoading: state.status == RegisterStatus.loading,
+                containerColor: const Color(0xFF534ab7),
+                onTap: () {
+                  context.read<RegisterBloc>().add(const RegisterSubmitted());
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            const _Divider(),
+            const SizedBox(height: 20),
+            const _GoogleButton(),
+            const Spacer(),
+            const _LoginRow(),
+          ],
+        ),
       ),
     );
   }
@@ -287,7 +291,9 @@ class _GoogleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        context.read<RegisterBloc>().add(const RegisterGoogleSignIn());
+      },
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),

@@ -99,7 +99,7 @@ class _BodyContent extends StatelessWidget {
           const Spacer(),
           AppButton(
             label: 'Start exploring',
-            enableIcon: true,
+            enableSuffixIcon: true,
             onTap: () async {
               await context.pushRoute(
                 ConstrainTightRoute(showNextButton: true),

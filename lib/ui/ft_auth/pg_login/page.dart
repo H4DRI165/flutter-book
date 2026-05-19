@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         },
         child: const SafeArea(
           child: Scaffold(
+            resizeToAvoidBottomInset: true,
             body: Padding(
               padding: EdgeInsets.all(16.0),
               child: Column(
@@ -110,99 +111,115 @@ class _BodyContentState extends State<_BodyContent> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          BlocBuilder<LoginBloc, LoginPageState>(
-            buildWhen: (previous, current) => previous.emailError != current.emailError,
-            builder: (context, state) {
-              return AppTextField(
-                controller: _emailController,
-                labelText: 'Email',
-                hintText: 'Enter your email',
-                border: AppFormFieldBorder.roundedOutlined,
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                errorText: state.emailError,
-                clearable: true,
-                onChanged: (value) {
-                  context.read<LoginBloc>().add(LoginEmailChanged(value));
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-          BlocBuilder<LoginBloc, LoginPageState>(
-            buildWhen: (previous, current) =>
-                previous.obscurePassword != current.obscurePassword || previous.passwordError != current.passwordError,
-            builder: (context, state) {
-              return AppTextField(
-                controller: _passwordController,
-                labelText: 'Password',
-                hintText: 'Enter your password',
-                border: AppFormFieldBorder.roundedOutlined,
-                prefixIcon: const Icon(
-                  Icons.lock_outlined,
-                  size: 20,
-                  color: Colors.grey,
-                ),
-                errorText: state.passwordError,
-                obscureText: state.obscurePassword,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    state.obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+      child: IntrinsicHeight(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            BlocBuilder<LoginBloc, LoginPageState>(
+              buildWhen: (previous, current) => previous.emailError != current.emailError,
+              builder: (context, state) {
+                return AppTextField(
+                  controller: _emailController,
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  border: AppFormFieldBorder.roundedOutlined,
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                    size: 20,
+                    color: Colors.grey,
                   ),
-                  onPressed: () {
-                    context.read<LoginBloc>().add(const LoginObscurePasswordToggled());
+                  errorText: state.emailError,
+                  clearable: true,
+                  onChanged: (value) {
+                    context.read<LoginBloc>().add(LoginEmailChanged(value));
                   },
-                ),
-                onChanged: (value) {
-                  context.read<LoginBloc>().add(LoginPasswordChanged(value));
-                },
-              );
-            },
-          ),
-          const SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              context.router.push(const ForgotPasswordRoute());
-            },
-            child: const Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                'Forgot password?',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 14,
-                  decoration: TextDecoration.underline,
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+            BlocBuilder<LoginBloc, LoginPageState>(
+              buildWhen: (previous, current) =>
+                  previous.obscurePassword != current.obscurePassword ||
+                  previous.passwordError != current.passwordError,
+              builder: (context, state) {
+                return AppTextField(
+                  controller: _passwordController,
+                  labelText: 'Password',
+                  hintText: 'Enter your password',
+                  border: AppFormFieldBorder.roundedOutlined,
+                  prefixIcon: const Icon(
+                    Icons.lock_outlined,
+                    size: 20,
+                    color: Colors.grey,
+                  ),
+                  errorText: state.passwordError,
+                  obscureText: state.obscurePassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      state.obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    ),
+                    onPressed: () {
+                      context.read<LoginBloc>().add(const LoginObscurePasswordToggled());
+                    },
+                  ),
+                  onChanged: (value) {
+                    context.read<LoginBloc>().add(LoginPasswordChanged(value));
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {
+                context.router.push(const ForgotPasswordRoute());
+              },
+              child: const Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Forgot password?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 14,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          BlocBuilder<LoginBloc, LoginPageState>(
-            buildWhen: (previous, current) => previous.status != current.status,
-            builder: (context, state) => AppButton(
-              label: 'Sign in',
-              isLoading: state.status == LoginStatus.loading,
-              containerColor: const Color(0xFF534ab7),
-              onTap: () {
-                context.read<LoginBloc>().add(const LoginSubmitted());
-              },
+            const SizedBox(height: 20),
+            BlocBuilder<LoginBloc, LoginPageState>(
+              buildWhen: (previous, current) => previous.status != current.status,
+              builder: (context, state) => AppButton(
+                label: 'Sign in',
+                isLoading: state.status == LoginStatus.loading,
+                containerColor: const Color(0xFF534ab7),
+                onTap: () {
+                  context.read<LoginBloc>().add(const LoginSubmitted());
+                },
+              ),
             ),
-          ),
-
-          const SizedBox(height: 20),
-          const _Divider(middleText: 'or continue with'),
-          const SizedBox(height: 20),
-          const _GoogleButton(),
-          const Spacer(),
-          const _SignUpRow(),
-        ],
+            const SizedBox(height: 20),
+            const _Divider(middleText: 'or continue with'),
+            const SizedBox(height: 20),
+            BlocBuilder<LoginBloc, LoginPageState>(
+              buildWhen: (previous, current) => previous.status != current.status,
+              builder: (context, state) => AppButton(
+                label: 'Continue with Google',
+                fontSize: 14,
+                isLoading: state.status == LoginStatus.loading,
+                enablePrefixIcon: true,
+                prefixIcon: Icons.g_mobiledata_rounded,
+                iconColor: Colors.red,
+                iconSize: 24,
+                onTap: () {
+                  context.read<LoginBloc>().add(const LoginSubmitted());
+                },
+              ),
+            ),
+            const Spacer(),
+            const _SignUpRow(),
+          ],
+        ),
       ),
     );
   }
@@ -254,40 +271,6 @@ class _Divider extends StatelessWidget {
           ),
         ],
       ],
-    );
-  }
-}
-
-class _GoogleButton extends StatelessWidget {
-  const _GoogleButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.read<LoginBloc>().add(const LoginGoogleSignIn());
-      },
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.g_mobiledata_rounded, size: 24, color: Colors.red),
-              SizedBox(width: 8),
-              Text(
-                'Continue with Google',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

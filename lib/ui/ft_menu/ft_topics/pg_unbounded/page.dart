@@ -73,7 +73,7 @@ class _BodyContentState extends State<_BodyContent> {
             AppButton(
               label: 'Main Menu',
               onTap: () {
-                context.router.replace(const MainMenuRoute());
+                context.router.replaceAll([const MainMenuRoute()]);
               },
             ),
         ],
@@ -322,7 +322,7 @@ class _InfoCard extends StatelessWidget {
               ),
             ),
             const Text(
-              'The parent sets no limit. The child can be any size even infinite.',
+              'The parent sets no limit. The child can be any size, even infinitely large.',
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.white,

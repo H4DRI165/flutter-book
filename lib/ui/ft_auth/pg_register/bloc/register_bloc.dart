@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../app.dart';
 
 part 'register_event.dart';
@@ -14,6 +15,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterPageState> {
     on<RegisterObscurePasswordToggled>(_onObscurePasswordToggled);
     on<RegisterObscureConfirmPasswordToggled>(_onObscureConfirmPasswordToggled);
     on<RegisterSubmitted>(_onSubmitted);
+    on<RegisterGoogleSignIn>(_onGoogleSignIn);
   }
 
   // --------------------------------- FIELDS ---------------------------------
@@ -24,14 +26,28 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterPageState> {
     RegisterEmailChanged event,
     Emitter<RegisterPageState> emit,
   ) {
-    emit(state.copyWith(email: event.email, emailError: null));
+    emit(
+      state.copyWith(
+        email: event.email,
+        emailError: null,
+        errorMessage: null,
+        status: RegisterStatus.initial,
+      ),
+    );
   }
 
   void _onPasswordChanged(
     RegisterPasswordChanged event,
     Emitter<RegisterPageState> emit,
   ) {
-    emit(state.copyWith(password: event.password, passwordError: null));
+    emit(
+      state.copyWith(
+        password: event.password,
+        passwordError: null,
+        errorMessage: null,
+        status: RegisterStatus.initial,
+      ),
+    );
   }
 
   void _onConfirmPasswordChanged(
@@ -42,6 +58,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterPageState> {
       state.copyWith(
         confirmPassword: event.confirmPassword,
         confirmPasswordError: null,
+        errorMessage: null,
+        status: RegisterStatus.initial,
       ),
     );
   }
@@ -50,21 +68,33 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterPageState> {
     RegisterObscurePasswordToggled event,
     Emitter<RegisterPageState> emit,
   ) {
-    emit(state.copyWith(obscurePassword: !state.obscurePassword));
+    emit(
+      state.copyWith(
+        obscurePassword: !state.obscurePassword,
+        errorMessage: null,
+        status: RegisterStatus.initial,
+      ),
+    );
   }
 
   void _onObscureConfirmPasswordToggled(
     RegisterObscureConfirmPasswordToggled event,
     Emitter<RegisterPageState> emit,
   ) {
-    emit(state.copyWith(obscureConfirmPassword: !state.obscureConfirmPassword));
+    emit(
+      state.copyWith(
+        obscureConfirmPassword: !state.obscureConfirmPassword,
+        errorMessage: null,
+        status: RegisterStatus.initial,
+      ),
+    );
   }
 
   Future<void> _onSubmitted(
     RegisterSubmitted event,
     Emitter<RegisterPageState> emit,
   ) async {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
 
     final emailError = state.email.isEmpty
         ? 'Email is required.'
@@ -104,6 +134,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterPageState> {
       emit(
         state.copyWith(status: RegisterStatus.failure, errorMessage: e.toString()),
       );
+    }
+  }
+
+  Future<void> _onGoogleSignIn(
+    RegisterGoogleSignIn event,
+    Emitter<RegisterPageState> emit,
+  ) async {
+    emit(state.copyWith(status: RegisterStatus.loading));
+
+    try {
+      await authRepository.signInWithGoogle();
+      emit(state.copyWith(status: RegisterStatus.success));
+    } on AuthException catch (e) {
+      emit(state.copyWith(status: RegisterStatus.failure, errorMessage: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: RegisterStatus.failure));
     }
   }
 }

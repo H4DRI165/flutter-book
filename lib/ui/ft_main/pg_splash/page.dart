@@ -23,12 +23,7 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!mounted) return;
 
-    final isLoggedIn = AuthRepository().isLoggedIn;
-    if (isLoggedIn) {
-      await context.router.replace(const MainMenuRoute());
-    } else {
-      await context.router.replace(const LoginRoute());
-    }
+    await context.router.replace(const MainMenuRoute());
   }
 
   @override

@@ -71,7 +71,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfilePageState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: ProfileStatus.failure));
+      emit(
+        state.copyWith(
+          status: ProfileStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 

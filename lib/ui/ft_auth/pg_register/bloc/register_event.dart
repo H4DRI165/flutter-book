@@ -42,3 +42,7 @@ class RegisterObscureConfirmPasswordToggled extends RegisterEvent {
 class RegisterSubmitted extends RegisterEvent {
   const RegisterSubmitted();
 }
+
+class RegisterGoogleSignIn extends RegisterEvent {
+  const RegisterGoogleSignIn();
+}

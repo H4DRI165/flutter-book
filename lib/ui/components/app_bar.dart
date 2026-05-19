@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
-      toolbarHeight: 80 + MediaQuery.of(context).padding.top,
+      toolbarHeight: 80,
       leading: fallBackButton
           ? GestureDetector(
               onTap: () => context.router.maybePop(),

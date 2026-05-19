@@ -239,10 +239,10 @@ class TopicLayout extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        if (enableTag)
+        if (enableTag && tag != null)
           DecoratedBox(
             decoration: BoxDecoration(
-              color: tagContainerColor!,
+              color: tagContainerColor ?? const Color(0xFFEEEDFE),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(

@@ -74,7 +74,7 @@ class _BodyContentState extends State<_BodyContent> {
           if (widget.showNextButton)
             AppButton(
               label: 'Next: loose',
-              enableIcon: true,
+              enableSuffixIcon: true,
               onTap: () {
                 context.pushRoute(
                   ConstrainLooseRoute(showNextButton: widget.showNextButton),

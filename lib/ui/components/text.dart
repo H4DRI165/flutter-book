@@ -143,6 +143,9 @@ class AppTextField extends StatelessWidget {
                 controller: controller,
                 focusNode: focusNode,
                 decoration: InputDecoration(
+                  floatingLabelBehavior: border == AppFormFieldBorder.outlinedWithAlwaysFloatingLabel
+                      ? FloatingLabelBehavior.always
+                      : null,
                   hintText: hintText,
                   hintStyle: TextStyle(
                     fontStyle: hintTextFontStyle,

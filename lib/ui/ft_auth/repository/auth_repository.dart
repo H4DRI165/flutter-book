@@ -65,6 +65,11 @@ class AuthRepository {
   }
 
   Future<String> uploadAvatar(File imageFile) async {
+    final user = currentUser;
+    if (user == null) {
+      throw StateError('User must be authenticated before uploading an avatar.');
+    }
+
     final userId = currentUser!.id;
     final path = '$userId/avatar.jpg';
 

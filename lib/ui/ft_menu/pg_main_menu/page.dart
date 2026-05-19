@@ -12,11 +12,19 @@ class MainMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MainMenuBloc(authRepository: AuthRepository()),
+      create: (context) => MainMenuBloc(
+        authRepository: context.read<AuthRepository>(),
+      ),
       child: BlocListener<MainMenuBloc, MainMenuState>(
         listener: (context, state) {
           if (state.status == MainMenuStatus.loggedOut) {
             context.router.replace(const LoginRoute());
+          } else if (state.status == MainMenuStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Failed to log out. Please try again.'),
+              ),
+            );
           }
         },
         child: Builder(
@@ -116,7 +124,7 @@ class FeaturedSection extends StatelessWidget {
             ],
             progressBarValue: 0.2,
             progressBarColor: Colors.green,
-            onTap: () async {
+            onTap: () {
               // WIP: implement widget tree page
             },
           ),

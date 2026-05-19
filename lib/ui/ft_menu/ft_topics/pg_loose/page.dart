@@ -75,7 +75,7 @@ class _BodyContentState extends State<_BodyContent> {
           if (widget.showNextButton)
             AppButton(
               label: 'Next: unbounded',
-              enableIcon: true,
+              enableSuffixIcon: true,
               onTap: () {
                 context.pushRoute(
                   ConstrainUnboundedRoute(showNextButton: widget.showNextButton),
@@ -285,7 +285,7 @@ class _InfoCard extends StatelessWidget {
               ),
             ),
             const Text(
-              'The parent sets a ranges. The child can choose any size within that range.',
+              'The parent sets a range. The child can choose any size within that range.',
               style: TextStyle(
                 fontSize: 13,
                 color: Colors.white,

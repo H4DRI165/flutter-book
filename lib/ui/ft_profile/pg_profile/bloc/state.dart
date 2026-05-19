@@ -12,6 +12,7 @@ class ProfilePageState extends Equatable {
     this.errorMessage,
   });
 
+  static const _unset = Object();
   final ProfileStatus status;
   final String fullName;
   final String email;
@@ -23,17 +24,17 @@ class ProfilePageState extends Equatable {
     ProfileStatus? status,
     String? fullName,
     String? email,
-    String? avatarUrl,
-    File? pickedImage,
-    String? errorMessage,
+    Object? avatarUrl = _unset,
+    Object? pickedImage = _unset,
+    Object? errorMessage = _unset,
   }) {
     return ProfilePageState(
       status: status ?? this.status,
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      pickedImage: pickedImage ?? this.pickedImage,
-      errorMessage: errorMessage ?? this.errorMessage,
+      avatarUrl: identical(avatarUrl, _unset) ? this.avatarUrl : avatarUrl as String?,
+      pickedImage: identical(pickedImage, _unset) ? this.pickedImage : pickedImage as File?,
+      errorMessage: identical(errorMessage, _unset) ? this.errorMessage : errorMessage as String?,
     );
   }
 
