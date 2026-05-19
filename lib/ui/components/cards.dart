@@ -246,7 +246,7 @@ class TopicLayout extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
-              padding: const EdgeInsetsGeometry.fromLTRB(10, 0, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Text(
                 tag!,
                 style: TextStyle(
