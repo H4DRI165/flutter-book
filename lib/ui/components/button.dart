@@ -85,3 +85,59 @@ class AppButton extends StatelessWidget {
     );
   }
 }
+
+class AppIconButton extends StatelessWidget {
+  const AppIconButton({
+    super.key,
+    required this.icon,
+    this.onLogout = false,
+    required this.onTap,
+  });
+  final IconData icon;
+  final bool onLogout;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onLogout
+          ? () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Proceed to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirm == true) {
+                onTap.call();
+              }
+            }
+          : onTap,
+      child: Container(
+        width: 34,
+        height: 34,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1C24),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF2E3140), width: 0.5),
+        ),
+        child: Icon(icon, size: 18, color: Colors.grey),
+      ),
+    );
+  }
+}
