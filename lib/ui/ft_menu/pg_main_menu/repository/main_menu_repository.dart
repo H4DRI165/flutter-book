@@ -7,6 +7,11 @@ class MainMenuRepository {
 
   final SupabaseClient _supabase;
 
+  String getDisplayName() {
+    final user = _supabase.auth.currentUser;
+    return user?.userMetadata?['full_name'] as String? ?? user?.userMetadata?['name'] as String? ?? user?.email ?? '';
+  }
+
   Future<List<Topic>> fetchTopics() async {
     final response = await _supabase.from('topics').select().order('order_index', ascending: true);
 

@@ -1,12 +1,19 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app.dart';
+import '../../pg_main_menu/bloc/main_menu_bloc.dart';
 
 @RoutePage()
 class ConstrainUnboundedPage extends StatefulWidget {
-  const ConstrainUnboundedPage({super.key, this.showNextButton = false});
+  const ConstrainUnboundedPage({
+    super.key,
+    required this.topicId,
+    this.showNextButton = false,
+  });
 
+  final String topicId;
   final bool showNextButton;
 
   @override
@@ -15,7 +22,24 @@ class ConstrainUnboundedPage extends StatefulWidget {
 
 class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> {
   @override
+  void initState() {
+    super.initState();
+    _markInProgress();
+  }
+
+  void _markInProgress() {
+    context.read<MainMenuBloc>().add(
+      MainMenuProgressUpdated(
+        topicId: widget.topicId,
+        status: ProgressStatus.inProgress,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final topic = context.read<MainMenuBloc>().state.topicById(widget.topicId);
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Unbounded Constraints',
@@ -23,60 +47,74 @@ class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> {
         subtitle: 'Drag sliders to see overflow',
         subtitleSize: 13,
       ),
-      body: _BodyContent(showNextButton: widget.showNextButton),
+      body: _BodyContent(
+        showNextButton: widget.showNextButton,
+        topicId: widget.topicId,
+        explanation: topic?.explanation ?? '',
+      ),
     );
   }
 }
 
 class _BodyContent extends StatefulWidget {
-  const _BodyContent({required this.showNextButton});
+  const _BodyContent({
+    required this.showNextButton,
+    required this.topicId,
+    this.explanation = '',
+  });
 
   final bool showNextButton;
+  final String topicId;
+  final String explanation;
 
   @override
   State<_BodyContent> createState() => _BodyContentState();
 }
 
-class _BodyContentState extends State<_BodyContent> {
+class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin {
+  @override
+  String get topicId => widget.topicId;
+
   double _width = 50;
   double _height = 50;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          _LivePreview(width: _width, height: _height),
-          const SizedBox(height: 10),
-          _MetricCards(width: _width, height: _height),
-          const SizedBox(height: 10),
-          SliderRow(
-            label: 'Width',
-            value: _width,
-            min: 0,
-            max: 210,
-            onChanged: (v) => setState(() => _width = v.roundToDouble()),
-          ),
-          const SizedBox(height: 8),
-          SliderRow(
-            label: 'Height',
-            value: _height,
-            min: 0,
-            max: 130,
-            onChanged: (v) => setState(() => _height = v.roundToDouble()),
-          ),
-          const SizedBox(height: 8),
-          const _InfoCard(),
-          const Spacer(),
-          if (widget.showNextButton)
-            AppButton(
-              label: 'Main Menu',
-              onTap: () {
-                context.router.replaceAll([const MainMenuRoute()]);
-              },
-            ),
-        ],
+    return ConstrainBodyLayout(
+      livePreview: _LivePreview(width: _width, height: _height),
+      metricCards: const ConstrainMetricCards(
+        subtitle: 'min → ∞',
+        leftValue: 'W: 0 → ∞',
+        rightValue: 'H: 0 → ∞',
+      ),
+      sliders: [
+        SliderRow(
+          label: 'Width',
+          value: _width,
+          min: 0,
+          max: 210,
+          onChanged: (v) => setState(() => _width = v.roundToDouble()),
+        ),
+        const SizedBox(height: 8),
+        SliderRow(
+          label: 'Height',
+          value: _height,
+          min: 0,
+          max: 130,
+          onChanged: (v) => setState(() => _height = v.roundToDouble()),
+        ),
+      ],
+      infoCardTitle: 'What is a unbounded constraint?',
+      explanation: widget.explanation,
+      topicId: widget.topicId,
+      onMarkCompleted: markCompleted,
+      showNextButton: widget.showNextButton,
+      nextButton: AppButton(
+        label: 'Main Menu',
+        enableSuffixIcon: true,
+        onTap: () {
+          context.router.replaceAll([const MainMenuRoute()]);
+        },
       ),
     );
   }
@@ -207,129 +245,6 @@ class _LivePreview extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
-      ),
-    );
-  }
-}
-
-class _MetricCards extends StatelessWidget {
-  const _MetricCards({required this.width, required this.height});
-
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: 0.3),
-                width: 0.5,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'min → ∞',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'W: 0 → ∞',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: 0.3),
-                width: 0.5,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'min → ∞',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'H: 0 → ∞',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.3),
-          width: 0.5,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'What is an unbounded constraint?',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey.withValues(alpha: 0.8),
-              ),
-            ),
-            const Text(
-              'The parent sets no limit. The child can be any size, even infinitely large.',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

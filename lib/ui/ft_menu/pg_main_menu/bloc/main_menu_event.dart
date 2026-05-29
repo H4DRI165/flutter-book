@@ -42,3 +42,7 @@ class MainMenuProgressUpdated extends MainMenuEvent {
   @override
   List<Object?> get props => [topicId, status];
 }
+
+class MainMenuRefreshDisplayName extends MainMenuEvent {
+  const MainMenuRefreshDisplayName();
+}
