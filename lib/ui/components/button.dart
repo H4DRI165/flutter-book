@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'dialog.dart';
+
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.label,
-    required this.onTap,
+    this.onTap,
     this.fontSize = 16,
     this.containerColor,
     this.enablePrefixIcon = false,
@@ -17,7 +19,7 @@ class AppButton extends StatelessWidget {
   });
 
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double fontSize;
   final Color? containerColor;
   final bool enablePrefixIcon;
@@ -31,7 +33,11 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading ? null : onTap,
+      onTap: isLoading
+          ? null
+          : onTap != null
+          ? () => onTap!()
+          : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: containerColor,
@@ -102,25 +108,10 @@ class AppIconButton extends StatelessWidget {
     return GestureDetector(
       onTap: onLogout
           ? () async {
-              final confirm = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Proceed to logout?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, false),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, true),
-                      child: const Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
+              final confirm = await showConfirmDialog(
+                context,
+                title: 'Logout',
+                content: 'Proceed to logout?',
               );
 
               if (confirm == true) {

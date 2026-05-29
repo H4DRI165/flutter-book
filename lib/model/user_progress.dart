@@ -1,4 +1,13 @@
 class UserProgress {
+  factory UserProgress.fromJson(Map<String, dynamic> json) {
+    return UserProgress(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      topicId: json['topic_id'] as String,
+      status: ProgressStatus.fromString(json['status'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
+  }
   const UserProgress({
     required this.id,
     required this.userId,
@@ -12,16 +21,6 @@ class UserProgress {
   final String topicId;
   final ProgressStatus status;
   final DateTime updatedAt;
-
-  factory UserProgress.fromJson(Map<String, dynamic> json) {
-    return UserProgress(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      topicId: json['topic_id'] as String,
-      status: ProgressStatus.fromString(json['status'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-    );
-  }
 }
 
 enum ProgressStatus {
