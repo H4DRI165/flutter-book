@@ -27,18 +27,39 @@ import 'package:flutter_book/ui/ft_profile/pg_profile/page.dart' as _i9;
 
 /// generated route for
 /// [_i1.ConstrainIntroPage]
-class ConstrainIntroRoute extends _i12.PageRouteInfo<void> {
-  const ConstrainIntroRoute({List<_i12.PageRouteInfo>? children})
-    : super(ConstrainIntroRoute.name, initialChildren: children);
+class ConstrainIntroRoute extends _i12.PageRouteInfo<ConstrainIntroRouteArgs> {
+  ConstrainIntroRoute({
+    _i13.Key? key,
+    required String topicId,
+    List<_i12.PageRouteInfo>? children,
+  }) : super(
+         ConstrainIntroRoute.name,
+         args: ConstrainIntroRouteArgs(key: key, topicId: topicId),
+         initialChildren: children,
+       );
 
   static const String name = 'ConstrainIntroRoute';
 
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i1.ConstrainIntroPage();
+      final args = data.argsAs<ConstrainIntroRouteArgs>();
+      return _i1.ConstrainIntroPage(key: args.key, topicId: args.topicId);
     },
   );
+}
+
+class ConstrainIntroRouteArgs {
+  const ConstrainIntroRouteArgs({this.key, required this.topicId});
+
+  final _i13.Key? key;
+
+  final String topicId;
+
+  @override
+  String toString() {
+    return 'ConstrainIntroRouteArgs{key: $key, topicId: $topicId}';
+  }
 }
 
 /// generated route for
@@ -46,12 +67,14 @@ class ConstrainIntroRoute extends _i12.PageRouteInfo<void> {
 class ConstrainLooseRoute extends _i12.PageRouteInfo<ConstrainLooseRouteArgs> {
   ConstrainLooseRoute({
     _i13.Key? key,
+    required String topicId,
     bool showNextButton = false,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          ConstrainLooseRoute.name,
          args: ConstrainLooseRouteArgs(
            key: key,
+           topicId: topicId,
            showNextButton: showNextButton,
          ),
          initialChildren: children,
@@ -62,11 +85,10 @@ class ConstrainLooseRoute extends _i12.PageRouteInfo<ConstrainLooseRouteArgs> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ConstrainLooseRouteArgs>(
-        orElse: () => const ConstrainLooseRouteArgs(),
-      );
+      final args = data.argsAs<ConstrainLooseRouteArgs>();
       return _i2.ConstrainLoosePage(
         key: args.key,
+        topicId: args.topicId,
         showNextButton: args.showNextButton,
       );
     },
@@ -74,15 +96,21 @@ class ConstrainLooseRoute extends _i12.PageRouteInfo<ConstrainLooseRouteArgs> {
 }
 
 class ConstrainLooseRouteArgs {
-  const ConstrainLooseRouteArgs({this.key, this.showNextButton = false});
+  const ConstrainLooseRouteArgs({
+    this.key,
+    required this.topicId,
+    this.showNextButton = false,
+  });
 
   final _i13.Key? key;
+
+  final String topicId;
 
   final bool showNextButton;
 
   @override
   String toString() {
-    return 'ConstrainLooseRouteArgs{key: $key, showNextButton: $showNextButton}';
+    return 'ConstrainLooseRouteArgs{key: $key, topicId: $topicId, showNextButton: $showNextButton}';
   }
 }
 
@@ -91,12 +119,14 @@ class ConstrainLooseRouteArgs {
 class ConstrainTightRoute extends _i12.PageRouteInfo<ConstrainTightRouteArgs> {
   ConstrainTightRoute({
     _i13.Key? key,
+    required String topicId,
     bool showNextButton = false,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          ConstrainTightRoute.name,
          args: ConstrainTightRouteArgs(
            key: key,
+           topicId: topicId,
            showNextButton: showNextButton,
          ),
          initialChildren: children,
@@ -107,11 +137,10 @@ class ConstrainTightRoute extends _i12.PageRouteInfo<ConstrainTightRouteArgs> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ConstrainTightRouteArgs>(
-        orElse: () => const ConstrainTightRouteArgs(),
-      );
+      final args = data.argsAs<ConstrainTightRouteArgs>();
       return _i3.ConstrainTightPage(
         key: args.key,
+        topicId: args.topicId,
         showNextButton: args.showNextButton,
       );
     },
@@ -119,15 +148,21 @@ class ConstrainTightRoute extends _i12.PageRouteInfo<ConstrainTightRouteArgs> {
 }
 
 class ConstrainTightRouteArgs {
-  const ConstrainTightRouteArgs({this.key, this.showNextButton = false});
+  const ConstrainTightRouteArgs({
+    this.key,
+    required this.topicId,
+    this.showNextButton = false,
+  });
 
   final _i13.Key? key;
+
+  final String topicId;
 
   final bool showNextButton;
 
   @override
   String toString() {
-    return 'ConstrainTightRouteArgs{key: $key, showNextButton: $showNextButton}';
+    return 'ConstrainTightRouteArgs{key: $key, topicId: $topicId, showNextButton: $showNextButton}';
   }
 }
 
@@ -137,12 +172,14 @@ class ConstrainUnboundedRoute
     extends _i12.PageRouteInfo<ConstrainUnboundedRouteArgs> {
   ConstrainUnboundedRoute({
     _i13.Key? key,
+    required String topicId,
     bool showNextButton = false,
     List<_i12.PageRouteInfo>? children,
   }) : super(
          ConstrainUnboundedRoute.name,
          args: ConstrainUnboundedRouteArgs(
            key: key,
+           topicId: topicId,
            showNextButton: showNextButton,
          ),
          initialChildren: children,
@@ -153,11 +190,10 @@ class ConstrainUnboundedRoute
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ConstrainUnboundedRouteArgs>(
-        orElse: () => const ConstrainUnboundedRouteArgs(),
-      );
+      final args = data.argsAs<ConstrainUnboundedRouteArgs>();
       return _i4.ConstrainUnboundedPage(
         key: args.key,
+        topicId: args.topicId,
         showNextButton: args.showNextButton,
       );
     },
@@ -165,15 +201,21 @@ class ConstrainUnboundedRoute
 }
 
 class ConstrainUnboundedRouteArgs {
-  const ConstrainUnboundedRouteArgs({this.key, this.showNextButton = false});
+  const ConstrainUnboundedRouteArgs({
+    this.key,
+    required this.topicId,
+    this.showNextButton = false,
+  });
 
   final _i13.Key? key;
+
+  final String topicId;
 
   final bool showNextButton;
 
   @override
   String toString() {
-    return 'ConstrainUnboundedRouteArgs{key: $key, showNextButton: $showNextButton}';
+    return 'ConstrainUnboundedRouteArgs{key: $key, topicId: $topicId, showNextButton: $showNextButton}';
   }
 }
 
