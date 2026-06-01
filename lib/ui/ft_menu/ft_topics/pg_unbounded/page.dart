@@ -20,20 +20,14 @@ class ConstrainUnboundedPage extends StatefulWidget {
   State<ConstrainUnboundedPage> createState() => _ConstrainUnboundedPageState();
 }
 
-class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> {
+class _ConstrainUnboundedPageState extends State<ConstrainUnboundedPage> with ConstrainProgressMixin {
+  @override
+  String get topicId => widget.topicId;
+
   @override
   void initState() {
     super.initState();
-    _markInProgress();
-  }
-
-  void _markInProgress() {
-    context.read<MainMenuBloc>().add(
-      MainMenuProgressUpdated(
-        topicId: widget.topicId,
-        status: ProgressStatus.inProgress,
-      ),
-    );
+    markInProgress();
   }
 
   @override
@@ -104,7 +98,7 @@ class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin 
           onChanged: (v) => setState(() => _height = v.roundToDouble()),
         ),
       ],
-      infoCardTitle: 'What is a unbounded constraint?',
+      infoCardTitle: 'What is an unbounded constraint?',
       explanation: widget.explanation,
       topicId: widget.topicId,
       onMarkCompleted: markCompleted,

@@ -7,6 +7,7 @@ enum MainMenuStatus {
   loggedOut,
   failure,
   loadingFailure,
+  progressUpdateFailure,
 }
 
 enum MainMenuFilter {

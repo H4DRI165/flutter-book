@@ -136,9 +136,9 @@ class TopicLayout extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.descriptionWidget,
+    required this.tag,
     this.iconColor,
     this.containerColor,
-    this.tag,
     this.tagColor,
     this.tagContainerColor,
   });
@@ -146,9 +146,9 @@ class TopicLayout extends StatelessWidget {
   final IconData icon;
   final String title;
   final Widget descriptionWidget;
+  final String tag;
   final Color? iconColor;
   final Color? containerColor;
-  final String? tag;
   final Color? tagColor;
   final Color? tagContainerColor;
 
@@ -191,7 +191,7 @@ class TopicLayout extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Text(
-              tag!,
+              tag,
               style: TextStyle(
                 fontSize: 15,
                 color: tagColor ?? Colors.black,

@@ -20,20 +20,14 @@ class ConstrainLoosePage extends StatefulWidget {
   State<ConstrainLoosePage> createState() => _ConstrainLoosePageState();
 }
 
-class _ConstrainLoosePageState extends State<ConstrainLoosePage> {
+class _ConstrainLoosePageState extends State<ConstrainLoosePage> with ConstrainProgressMixin {
+  @override
+  String get topicId => widget.topicId;
+
   @override
   void initState() {
     super.initState();
-    _markInProgress();
-  }
-
-  void _markInProgress() {
-    context.read<MainMenuBloc>().add(
-      MainMenuProgressUpdated(
-        topicId: widget.topicId,
-        status: ProgressStatus.inProgress,
-      ),
-    );
+    markInProgress();
   }
 
   @override
@@ -113,16 +107,24 @@ class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin 
         label: 'Next: unbounded',
         enableSuffixIcon: true,
         onTap: () {
-          final looseId = context
+          final unboundedTopic = context
               .read<MainMenuBloc>()
               .state
               .topics
-              .firstWhere((t) => t.slug == 'constrain_unbounded')
-              .id;
+              .where((t) => t.slug == 'constrain_unbounded')
+              .firstOrNull;
+
+          if (unboundedTopic == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Next topic is unavailable.')),
+            );
+            return;
+          }
+
           context.pushRoute(
             ConstrainUnboundedRoute(
               showNextButton: widget.showNextButton,
-              topicId: looseId,
+              topicId: unboundedTopic.id,
             ),
           );
         },

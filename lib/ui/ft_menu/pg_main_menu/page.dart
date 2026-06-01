@@ -28,7 +28,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
   }
 
   void _onRouteChanged() {
-    // fires when a route is popped back to this page
     if (context.router.current.name == MainMenuRoute.name) {
       context.read<MainMenuBloc>().add(const MainMenuRefreshDisplayName());
     }
@@ -49,7 +48,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
               ),
             );
           } else if (state.status == MainMenuStatus.loadingFailure) {
-            // fires for topic loading failure
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Failed to load topics. Please try again.'),
@@ -464,26 +462,41 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _Avatar extends StatelessWidget {
+  String _extractInitials(String name) {
+    final parts = name.trim().split(' ');
+    if (parts.length >= 2) {
+      return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+    }
+    return name.isNotEmpty ? name[0].toUpperCase() : '?';
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E2340),
-        shape: BoxShape.circle,
-        border: Border.all(color: const Color(0xFF2E3260), width: 0.5),
-      ),
-      child: const Center(
-        child: Text(
-          'HZ',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF7B8EF5),
+    return BlocBuilder<MainMenuBloc, MainMenuPageState>(
+      buildWhen: (prev, curr) => prev.displayName != curr.displayName,
+      builder: (context, state) {
+        final initials = _extractInitials(state.displayName);
+
+        return Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E2340),
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFF2E3260), width: 0.5),
           ),
-        ),
-      ),
+          child: Center(
+            child: Text(
+              initials,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF7B8EF5),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -540,7 +553,7 @@ class _ProgressCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
-              value: completed / total,
+              value: total > 0 ? completed / total : 0,
               minHeight: 6,
               backgroundColor: const Color(0xFF252840),
               valueColor: const AlwaysStoppedAnimation(Color(0xFF5C6BC0)),

@@ -93,7 +93,7 @@ class MainMenuBloc extends Bloc<MainMenuEvent, MainMenuPageState> {
       final progress = await mainMenuRepository.fetchUserProgress();
       emit(state.copyWith(userProgress: progress));
     } catch (e) {
-      emit(state.copyWith(status: MainMenuStatus.failure));
+      emit(state.copyWith(status: MainMenuStatus.progressUpdateFailure));
     }
   }
 }

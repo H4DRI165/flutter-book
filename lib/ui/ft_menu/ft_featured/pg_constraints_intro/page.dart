@@ -189,10 +189,17 @@ class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin 
                   .where((t) => t.slug == 'constrain_tight')
                   .firstOrNull;
 
+              if (tightTopic == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Unable to open the next topic right now.')),
+                );
+                return;
+              }
+
               await context.pushRoute(
                 ConstrainTightRoute(
                   showNextButton: true,
-                  topicId: tightTopic?.id ?? '',
+                  topicId: tightTopic.id,
                 ),
               );
             },

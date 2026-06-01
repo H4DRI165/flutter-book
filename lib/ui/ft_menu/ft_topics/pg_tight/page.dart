@@ -107,11 +107,24 @@ class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin 
         label: 'Next: loose',
         enableSuffixIcon: true,
         onTap: () {
-          final looseId = context.read<MainMenuBloc>().state.topics.firstWhere((t) => t.slug == 'constrain_loose').id;
+          final looseTopic = context
+              .read<MainMenuBloc>()
+              .state
+              .topics
+              .where((t) => t.slug == 'constrain_loose')
+              .firstOrNull;
+
+          if (looseTopic == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Next topic is unavailable.')),
+            );
+            return;
+          }
+
           context.pushRoute(
             ConstrainLooseRoute(
               showNextButton: widget.showNextButton,
-              topicId: looseId,
+              topicId: looseTopic.id,
             ),
           );
         },
