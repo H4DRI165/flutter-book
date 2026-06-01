@@ -1,23 +1,39 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app.dart';
+import '../../pg_main_menu/bloc/main_menu_bloc.dart';
 
 @RoutePage()
 class ConstrainTightPage extends StatefulWidget {
   const ConstrainTightPage({
     super.key,
+    required this.topicId,
     this.showNextButton = false,
   });
 
+  final String topicId;
   final bool showNextButton;
+
   @override
   State<ConstrainTightPage> createState() => _ConstrainTightPageState();
 }
 
-class _ConstrainTightPageState extends State<ConstrainTightPage> {
+class _ConstrainTightPageState extends State<ConstrainTightPage> with ConstrainProgressMixin {
+  @override
+  String get topicId => widget.topicId;
+
+  @override
+  void initState() {
+    super.initState();
+    markInProgress();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final topic = context.read<MainMenuBloc>().state.topicById(widget.topicId);
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Tight Constraints',
@@ -25,63 +41,93 @@ class _ConstrainTightPageState extends State<ConstrainTightPage> {
         subtitle: 'Drag sliders to explore the range',
         subtitleSize: 13,
       ),
-      body: _BodyContent(showNextButton: widget.showNextButton),
+      body: _BodyContent(
+        showNextButton: widget.showNextButton,
+        topicId: widget.topicId,
+        explanation: topic?.explanation ?? '',
+      ),
     );
   }
 }
 
 class _BodyContent extends StatefulWidget {
-  const _BodyContent({required this.showNextButton});
+  const _BodyContent({
+    required this.showNextButton,
+    required this.topicId,
+    this.explanation = '',
+  });
 
+  final String topicId;
   final bool showNextButton;
+  final String explanation;
 
   @override
   State<_BodyContent> createState() => _BodyContentState();
 }
 
-class _BodyContentState extends State<_BodyContent> {
+class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin {
+  @override
+  String get topicId => widget.topicId;
+
   double _width = 170;
   double _height = 90;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          _LivePreview(width: _width, height: _height),
-          const SizedBox(height: 10),
-          _MetricCards(width: _width, height: _height),
-          const SizedBox(height: 10),
-          SliderRow(
-            label: 'Width',
-            value: _width,
-            min: 80,
-            max: 210,
-            onChanged: (v) => setState(() => _width = v.roundToDouble()),
-          ),
-          const SizedBox(height: 8),
-          SliderRow(
-            label: 'Height',
-            value: _height,
-            min: 50,
-            max: 130,
-            onChanged: (v) => setState(() => _height = v.roundToDouble()),
-          ),
-          const SizedBox(height: 8),
-          const _InfoCard(),
-          const Spacer(),
-          if (widget.showNextButton)
-            AppButton(
-              label: 'Next: loose',
-              enableSuffixIcon: true,
-              onTap: () {
-                context.pushRoute(
-                  ConstrainLooseRoute(showNextButton: widget.showNextButton),
-                );
-              },
+    return ConstrainBodyLayout(
+      livePreview: _LivePreview(width: _width, height: _height),
+      metricCards: ConstrainMetricCards(
+        subtitle: 'min == max (tight)',
+        leftValue: 'W: ${_width.toInt()}',
+        rightValue: 'H: ${_height.toInt()}',
+      ),
+      sliders: [
+        SliderRow(
+          label: 'Width',
+          value: _width,
+          min: 0,
+          max: 210,
+          onChanged: (v) => setState(() => _width = v.roundToDouble()),
+        ),
+        const SizedBox(height: 8),
+        SliderRow(
+          label: 'Height',
+          value: _height,
+          min: 0,
+          max: 130,
+          onChanged: (v) => setState(() => _height = v.roundToDouble()),
+        ),
+      ],
+      infoCardTitle: 'What is a tight constraint?',
+      explanation: widget.explanation,
+      topicId: widget.topicId,
+      onMarkCompleted: markCompleted,
+      showNextButton: widget.showNextButton,
+      nextButton: AppButton(
+        label: 'Next: loose',
+        enableSuffixIcon: true,
+        onTap: () {
+          final looseTopic = context
+              .read<MainMenuBloc>()
+              .state
+              .topics
+              .where((t) => t.slug == 'constrain_loose')
+              .firstOrNull;
+
+          if (looseTopic == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Next topic is unavailable.')),
+            );
+            return;
+          }
+
+          context.pushRoute(
+            ConstrainLooseRoute(
+              showNextButton: widget.showNextButton,
+              topicId: looseTopic.id,
             ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -169,129 +215,6 @@ class _LivePreview extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
-      ),
-    );
-  }
-}
-
-class _MetricCards extends StatelessWidget {
-  const _MetricCards({required this.width, required this.height});
-
-  final double width;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: 0.3),
-                width: 0.5,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'min == max (tight)',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'W: ${width.toInt()}',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.grey.withValues(alpha: 0.3),
-                width: 0.5,
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'min == max (tight)',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'H: ${height.toInt()}',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.3),
-          width: 0.5,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'What is a tight constraint?',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey.withValues(alpha: 0.8),
-              ),
-            ),
-            const Text(
-              'The parent forces an exact size. The child has no choice — it must be exactly that width and height.',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

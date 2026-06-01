@@ -212,7 +212,7 @@ class _BodyContentState extends State<_BodyContent> {
                 iconColor: Colors.red,
                 iconSize: 24,
                 onTap: () {
-                  context.read<LoginBloc>().add(const LoginSubmitted());
+                  context.read<LoginBloc>().add(const LoginGoogleSignIn());
                 },
               ),
             ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'dialog.dart';
+
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.label,
-    required this.onTap,
+    this.onTap,
     this.fontSize = 16,
     this.containerColor,
     this.enablePrefixIcon = false,
@@ -17,7 +19,7 @@ class AppButton extends StatelessWidget {
   });
 
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final double fontSize;
   final Color? containerColor;
   final bool enablePrefixIcon;
@@ -81,6 +83,47 @@ class AppButton extends StatelessWidget {
                   ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AppIconButton extends StatelessWidget {
+  const AppIconButton({
+    super.key,
+    required this.icon,
+    this.onLogout = false,
+    required this.onTap,
+  });
+  final IconData icon;
+  final bool onLogout;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onLogout
+          ? () async {
+              final confirm = await showConfirmDialog(
+                context,
+                title: 'Logout',
+                content: 'Proceed to logout?',
+              );
+
+              if (confirm == true) {
+                onTap.call();
+              }
+            }
+          : onTap,
+      child: Container(
+        width: 34,
+        height: 34,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1A1C24),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFF2E3140), width: 0.5),
+        ),
+        child: Icon(icon, size: 18, color: Colors.grey),
       ),
     );
   }
