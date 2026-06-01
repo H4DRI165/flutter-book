@@ -33,6 +33,7 @@ class ConstrainBodyLayout extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           livePreview,
           const SizedBox(height: 10),
@@ -40,9 +41,12 @@ class ConstrainBodyLayout extends StatelessWidget {
           const SizedBox(height: 10),
           ...sliders,
           const SizedBox(height: 8),
-          InfoCard(
-            title: infoCardTitle,
-            explanation: explanation,
+          SizedBox(
+            width: double.infinity,
+            child: InfoCard(
+              title: infoCardTitle,
+              explanation: explanation,
+            ),
           ),
           const Spacer(),
           BlocBuilder<MainMenuBloc, MainMenuPageState>(

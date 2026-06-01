@@ -18,16 +18,7 @@ class ConstrainIntroPage extends StatefulWidget {
   State<ConstrainIntroPage> createState() => _ConstrainIntroPageState();
 }
 
-class _ConstrainIntroPageState extends State<ConstrainIntroPage> with ConstrainProgressMixin {
-  @override
-  String get topicId => widget.topicId;
-
-  @override
-  void initState() {
-    super.initState();
-    markInProgress();
-  }
-
+class _ConstrainIntroPageState extends State<ConstrainIntroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +42,7 @@ class _BodyContent extends StatefulWidget {
   State<_BodyContent> createState() => _BodyContentState();
 }
 
-class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin {
-  @override
-  String get topicId => widget.topicId;
-
+class _BodyContentState extends State<_BodyContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -157,26 +145,6 @@ class _BodyContentState extends State<_BodyContent> with ConstrainProgressMixin 
             ),
           ),
           const Spacer(),
-          BlocBuilder<MainMenuBloc, MainMenuPageState>(
-            buildWhen: (prev, curr) => prev.userProgress != curr.userProgress,
-            builder: (context, state) {
-              final isCompleted = state.progressFor(widget.topicId) == ProgressStatus.completed;
-              return AppButton(
-                label: isCompleted ? 'Completed ✓' : 'Mark as complete',
-                containerColor: isCompleted ? const Color(0xFF0D2E1A) : const Color(0xFF534AB7),
-                onTap: isCompleted
-                    ? null
-                    : () async {
-                        final confirmed = await showConfirmDialog(
-                          context,
-                          title: 'Mark as completed?',
-                          content: 'Are you sure you have understood this topic?',
-                        );
-                        if (confirmed) markCompleted();
-                      },
-              );
-            },
-          ),
           const SizedBox(height: 8),
           AppButton(
             label: 'Start exploring',
