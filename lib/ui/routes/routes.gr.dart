@@ -27,39 +27,18 @@ import 'package:flutter_book/ui/ft_profile/pg_profile/page.dart' as _i9;
 
 /// generated route for
 /// [_i1.ConstrainIntroPage]
-class ConstrainIntroRoute extends _i12.PageRouteInfo<ConstrainIntroRouteArgs> {
-  ConstrainIntroRoute({
-    _i13.Key? key,
-    required String topicId,
-    List<_i12.PageRouteInfo>? children,
-  }) : super(
-         ConstrainIntroRoute.name,
-         args: ConstrainIntroRouteArgs(key: key, topicId: topicId),
-         initialChildren: children,
-       );
+class ConstrainIntroRoute extends _i12.PageRouteInfo<void> {
+  const ConstrainIntroRoute({List<_i12.PageRouteInfo>? children})
+    : super(ConstrainIntroRoute.name, initialChildren: children);
 
   static const String name = 'ConstrainIntroRoute';
 
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<ConstrainIntroRouteArgs>();
-      return _i1.ConstrainIntroPage(key: args.key, topicId: args.topicId);
+      return const _i1.ConstrainIntroPage();
     },
   );
-}
-
-class ConstrainIntroRouteArgs {
-  const ConstrainIntroRouteArgs({this.key, required this.topicId});
-
-  final _i13.Key? key;
-
-  final String topicId;
-
-  @override
-  String toString() {
-    return 'ConstrainIntroRouteArgs{key: $key, topicId: $topicId}';
-  }
 }
 
 /// generated route for

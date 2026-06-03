@@ -12,9 +12,7 @@ void navigateToTopic({
   switch (slug) {
     case 'constrain_intro':
       context.pushRoute(
-        ConstrainIntroRoute(
-          topicId: topicId,
-        ),
+        const ConstrainIntroRoute(),
       );
     case 'constrain_tight':
       context.pushRoute(
